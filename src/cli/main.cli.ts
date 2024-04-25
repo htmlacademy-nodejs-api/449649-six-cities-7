@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { ImportCommand } from './commands/import.command.js';
 import { CLIApplication, HelpCommand, VersionCommand } from './index.js';
 
