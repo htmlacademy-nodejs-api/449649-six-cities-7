@@ -1,26 +1,25 @@
-import { City } from './city.type.js';
-import { GoodType } from './good-type.type.js';
-import { Location } from './location.type.js';
-import { OfferType } from './offer-type.type.js';
-import { User } from './user.type.js';
+import { TCity } from './city.type.js';
+import { EGoodType, EOfferType } from './enums.js';
+import { TLocation } from './location.type.js';
+import { IUser } from './user.type.js';
 
-export type Offer = {
+export interface IOffer {
   id: string;
   title: string;
   description: string;
   postDate: Date;
-  city: City;
+  city: TCity;
   previewImage: string;
   images: string[];
   isPremium: boolean;
   isFavorite: boolean;
   rating: number;
-  type: OfferType;
+  type: EOfferType;
   bedrooms: number;
   maxAdults: number;
   price: number;
-  goods: GoodType[];
-  user: User;
+  goods: EGoodType[];
+  user: IUser;
   numberOfComments: number;
-  location: Location;
-};
+  location: TLocation;
+}

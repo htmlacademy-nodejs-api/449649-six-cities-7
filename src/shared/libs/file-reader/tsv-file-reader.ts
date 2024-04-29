@@ -1,14 +1,12 @@
 import { readFileSync } from 'node:fs';
 
 import { FileReader } from './file-reader.interface.js';
-import { Offer } from '../../types/offer.type.js';
-import { City } from '../../types/city.type.js';
-import { OfferType } from '../../types/offer-type.type.js';
-import { GoodType } from '../../types/good-type.type.js';
-import { CitiesNames } from '../../types/citiesNames.type.js';
-import { Location } from '../../types/location.type.js';
+import { IOffer } from '../../types/offer.type.js';
+import { TCity } from '../../types/city.type.js';
+import { ECityName, EGoodType, EOfferType, EUserType } from '../../types/enums.js';
+import { TLocation } from '../../types/location.type.js';
 import { CITIES } from '../../types/cities.type.js';
-import { User } from '../../types/user.type.js';
+import { IUser } from '../../types/user.type.js';
 
 export class TSVFileReader implements FileReader {
   private rawData = '';
@@ -23,14 +21,14 @@ export class TSVFileReader implements FileReader {
     }
   }
 
-  private parseRawDataToOffers(): Offer[] {
+  private parseRawDataToOffers(): IOffer[] {
     return this.rawData
       .split('\n')
       .filter((row) => row.trim().length > 0)
       .map((line) => this.parseLineToOffer(line));
   }
 
-  private parseLineToOffer(line: string): Offer {
+  private parseLineToOffer(line: string): IOffer {
     const [
       id,
       title,
@@ -51,7 +49,7 @@ export class TSVFileReader implements FileReader {
       email,
       avatarPath,
       password,
-      isPro,
+      userType,
       numberOfComments,
       latitude,
       longitude
@@ -73,30 +71,19 @@ export class TSVFileReader implements FileReader {
       maxAdults: parseInt(maxAdults, 10),
       price: this.parsePrice(price),
       goods: this.parseGoods(goods),
-      user: this.parseUser(name, email, avatarPath, password, !!isPro),
+      user: this.parseUser(name, email, avatarPath, password, userType),
       numberOfComments: parseInt(numberOfComments, 10),
       location: this.parseLocation(latitude, longitude)
     };
   }
 
-  private parseGoods(goodsString: string): GoodType[] {
-    const goodsArray = goodsString.split(';');
-    const parsedGoods: GoodType[] = [];
-
-    goodsArray.forEach((good) => {
-      if (Object.values(GoodType).includes(good as GoodType)) {
-        parsedGoods.push(good as GoodType);
-      } else {
-        console.error(`Unknown GoodType: ${good}`);
-      }
-    });
-
-    return parsedGoods;
+  private parseGoods(goodsString: string): EGoodType[] {
+    return goodsString.split(';').filter((good) => good in EGoodType) as EGoodType[];
   }
 
-  private parseCity(cityName: string): City {
-    if (Object.values(CitiesNames).includes(cityName as CitiesNames)) {
-      const location: Location = CITIES[cityName as CitiesNames];
+  private parseCity(cityName: string): TCity {
+    if (Object.values(ECityName).includes(cityName as ECityName)) {
+      const location: TLocation = CITIES[cityName as ECityName];
       return { name: cityName, location };
     } else {
       console.error(`Unknown city name: ${cityName}`);
@@ -104,14 +91,14 @@ export class TSVFileReader implements FileReader {
     }
   }
 
-  private parseOfferType(typeString: string): OfferType {
+  private parseOfferType(typeString: string): EOfferType {
     const normalizedType = typeString.toLowerCase();
 
-    if (normalizedType in OfferType) {
-      return normalizedType as OfferType;
+    if (normalizedType in EOfferType) {
+      return normalizedType as EOfferType;
     } else {
       console.error(`Unknown offer type: ${typeString}`);
-      return OfferType.Appartment;
+      return EOfferType.APARTMENT;
     }
   }
 
@@ -124,20 +111,27 @@ export class TSVFileReader implements FileReader {
     return Number.parseInt(priceString, 10);
   }
 
-  private parseLocation(latitudeStr: string, longitudeStr: string): Location {
+  private parseLocation(latitudeStr: string, longitudeStr: string): TLocation {
     const latitude = parseFloat(latitudeStr);
     const longitude = parseFloat(longitudeStr);
 
     return { latitude, longitude };
   }
 
-  private parseUser(name: string, email: string, avatarPath: string, password: string, isPro: boolean): User {
+  private parseUser(name: string, email: string, avatarPath: string, password: string, userType: string): IUser {
+    let type = userType.toLowerCase();
+    if (type in EUserType) {
+      type = type as EUserType;
+    } else {
+      console.error(`Unknown user type: ${userType}`);
+      type = EUserType.BASIC;
+    }
     return {
       name: name,
       email: email,
       avatarPath: avatarPath,
       password: password,
-      isPro: isPro
+      type: type as EUserType
     };
   }
 
@@ -145,7 +139,7 @@ export class TSVFileReader implements FileReader {
     this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
   }
 
-  public toArray(): Offer[] {
+  public toArray(): IOffer[] {
     this.validateRawData();
     return this.parseRawDataToOffers();
   }

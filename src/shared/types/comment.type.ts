@@ -1,9 +1,9 @@
-import { User } from './user.type.js';
+import { IUser } from './user.type.js';
 
-export type Comment = {
+export interface IReview {
   id: string;
-  text: string;
+  comment: string;
   createdDate: Date;
   rating: number;
-  user: User;
+  user: IUser;
 }

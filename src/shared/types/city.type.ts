@@ -1,6 +1,6 @@
-import { Location } from './location.type.js';
+import { TLocation } from './location.type.js';
 
-export type City = {
+export type TCity = {
   name: string;
-  location: Location;
+  location: TLocation;
 };
