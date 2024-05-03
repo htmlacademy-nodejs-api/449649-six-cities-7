@@ -2,7 +2,7 @@ import { TCity } from './city.type.js';
 import { EGoodType, EOfferType , EUserType} from './enums.js';
 import { TLocation } from './location.type.js';
 
-export interface IMockServerData {
+export type TMockServerData = {
   titles: string[];
   descriptions: string[];
   cities: TCity[];
