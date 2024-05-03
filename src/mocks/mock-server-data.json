@@ -1,232 +1,383 @@
-[
-  {
-    "id": "5db4802f-6551-426d-b9b3-452f3fe50ab8",
-    "title": "Wood and stone place",
-    "type": "room",
-    "price": 184,
-    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/5.jpg",
-    "city": {
-      "name": "Paris",
-      "location": {
-        "latitude": 48.85661,
-        "longitude": 2.351499,
-        "zoom": 13
+{
+  "api": {
+    "offers": [
+      {
+        "id": "0335975f-74ab-49c5-a707-6a41aa1dba9c",
+        "title": "Amazing and Extremely Central Flat",
+        "description": "Description for Flat",
+        "postDate": "2024-04-25",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.868610000000004,
+            "longitude": 2.342499
+          }
+        },
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/2.jpg",
+        "images": [
+          "https://15.design.htmlacademy.pro/static/hotel/2.jpg",
+          "https://15.design.htmlacademy.pro/static/hotel/3.jpg"
+        ],
+        "isPremium": true,
+        "isFavorite": false,
+        "rating": 4.5,
+        "type": "apartment",
+        "bedrooms": 2,
+        "maxAdults": 4,
+        "price": 330,
+        "goods": [
+          "Breakfast",
+          "Washer",
+          "Baby seat"
+        ],
+        "host": {
+          "name": "John Doe",
+          "email": "john@example.com",
+          "avatarPath": "/avatars/john.jpg",
+          "password": "password123",
+          "userType": "Pro"
+        },
+        "numberOfComments": 12,
+        "location": {
+          "latitude": 48.868610000000004,
+          "longitude": 2.342499
+        }
+      },
+      {
+        "id": "be506eea-bf7e-4129-bd44-4a696ed14feb",
+        "title": "Penthouse, 4-5 rooms + 5 balconies",
+        "description": "Description for Penthouse",
+        "postDate": "2024-04-25",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.858610000000006,
+            "longitude": 2.330499
+          }
+        },
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/12.jpg",
+        "images": [
+          "https://15.design.htmlacademy.pro/static/hotel/12.jpg",
+          "https://15.design.htmlacademy.pro/static/hotel/13.jpg"
+        ],
+        "isPremium": true,
+        "isFavorite": false,
+        "rating": 4.8,
+        "type": "hotel",
+        "bedrooms": 5,
+        "maxAdults": 6,
+        "price": 242,
+        "goods": [
+          "Fridge",
+          "Baby seat",
+          "Air conditioning"
+        ],
+        "host": {
+          "name": "Jane Smith",
+          "email": "jane@example.com",
+          "avatarPath": "/avatars/jane.jpg",
+          "password": "password456",
+          "userType": "Pro"
+        },
+        "numberOfComments": 8,
+        "location": {
+          "latitude": 48.858610000000006,
+          "longitude": 2.330499
+        }
+      },
+      {
+        "id": "440d9992-a6bd-478d-a340-2042c4f7fbf6",
+        "title": "House in countryside",
+        "description": "Description for House",
+        "postDate": "2024-04-25",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.834610000000005,
+            "longitude": 2.335499
+          }
+        },
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/9.jpg",
+        "images": [
+          "https://15.design.htmlacademy.pro/static/hotel/9.jpg",
+          "https://15.design.htmlacademy.pro/static/hotel/10.jpg"
+        ],
+        "isPremium": true,
+        "isFavorite": false,
+        "rating": 2.3,
+        "type": "hotel",
+        "bedrooms": 3,
+        "maxAdults": 8,
+        "price": 355,
+        "goods": [
+          "Breakfast",
+          "Laptop friendly workspace",
+          "Towels"
+        ],
+        "host": {
+          "name": "Adam Johnson",
+          "email": "adam@example.com",
+          "avatarPath": "/avatars/adam.jpg",
+          "password": "password789",
+          "userType": "Обычный"
+        },
+        "numberOfComments": 5,
+        "location": {
+          "latitude": 48.834610000000005,
+          "longitude": 2.335499
+        }
+      },
+      {
+        "id": "17415e3e-59d6-4977-aa17-350274de5055",
+        "title": "Perfectly located Castro",
+        "description": "Description for Castro",
+        "postDate": "2024-04-25",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85761,
+            "longitude": 2.358499
+          }
+        },
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/15.jpg",
+        "images": [
+          "https://15.design.htmlacademy.pro/static/hotel/15.jpg",
+          "https://15.design.htmlacademy.pro/static/hotel/16.jpg"
+        ],
+        "isPremium": true,
+        "isFavorite": false,
+        "rating": 1.7,
+        "type": "hotel",
+        "bedrooms": 1,
+        "maxAdults": 2,
+        "price": 297,
+        "goods": [
+          "Fridge",
+          "Towels"
+        ],
+        "host": {
+          "name": "Sarah Johnson",
+          "email": "sarah@example.com",
+          "avatarPath": "/avatars/sarah.jpg",
+          "password": "passwordabc",
+          "userType": "Обычный"
+        },
+        "numberOfComments": 3,
+        "location": {
+          "latitude": 48.85761,
+          "longitude": 2.358499
+        }
+      },
+      {
+        "id": "5db4802f-6551-426d-b9b3-452f3fe50ab8",
+        "title": "Wood and stone place",
+        "type": "room",
+        "price": 184,
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/5.jpg",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85661,
+            "longitude": 2.351499
+          }
+        },
+        "location": {
+          "latitude": 48.868610000000004,
+          "longitude": 2.342499
+        },
+        "isFavorite": false,
+        "isPremium": true,
+        "rating": 3.2
+      },
+      {
+        "id": "c4e55e09-559f-442f-99c1-a28452c50681",
+        "title": "Perfectly located Castro",
+        "type": "hotel",
+        "price": 369,
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/7.jpg",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85661,
+            "longitude": 2.351499
+          }
+        },
+        "location": {
+          "latitude": 48.858610000000006,
+          "longitude": 2.330499
+        },
+        "isFavorite": false,
+        "isPremium": true,
+        "rating": 1.6
+      },
+      {
+        "id": "d92a06d6-586e-4740-8010-c7024c11002f",
+        "title": "Wood and stone place",
+        "type": "apartment",
+        "price": 267,
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/1.jpg",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85661,
+            "longitude": 2.351499
+          }
+        },
+        "location": {
+          "latitude": 48.834610000000005,
+          "longitude": 2.335499
+        },
+        "isFavorite": false,
+        "isPremium": false,
+        "rating": 3.7
+      },
+      {
+        "id": "1a584572-55a3-47a0-a15d-23df237913f5",
+        "title": "Perfectly located Castro",
+        "type": "room",
+        "price": 216,
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/17.jpg",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85661,
+            "longitude": 2.351499
+          }
+        },
+        "location": {
+          "latitude": 48.85761,
+          "longitude": 2.358499
+        },
+        "isFavorite": false,
+        "isPremium": true,
+        "rating": 1.6
+      },
+      {
+        "id": "5af7cb7d-6a06-4704-9826-abd03c167ed4",
+        "title": "Wood and stone place",
+        "type": "room",
+        "price": 137,
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/8.jpg",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85661,
+            "longitude": 2.351499
+          }
+        },
+        "location": {
+          "latitude": 48.87561,
+          "longitude": 2.375499
+        },
+        "isFavorite": false,
+        "isPremium": true,
+        "rating": 4.3
+      },
+      {
+        "id": "ed61fcbd-034d-4a4c-96c9-c26fbdcabc3b",
+        "title": "Tile House",
+        "type": "apartment",
+        "price": 144,
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/9.jpg",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85661,
+            "longitude": 2.351499
+          }
+        },
+        "location": {
+          "latitude": 48.87961000000001,
+          "longitude": 2.353499
+        },
+        "isFavorite": false,
+        "isPremium": true,
+        "rating": 4
+      },
+      {
+        "id": "db4a925a-d0cd-47d0-afce-56c6a5d8fa55",
+        "title": "Beautiful & luxurious apartment at great location",
+        "type": "house",
+        "price": 728,
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/20.jpg",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85661,
+            "longitude": 2.351499
+          }
+        },
+        "location": {
+          "latitude": 48.834610000000005,
+          "longitude": 2.364499
+        },
+        "isFavorite": false,
+        "isPremium": false,
+        "rating": 4.5
+      },
+      {
+        "id": "f8c107b7-4a53-4169-bb35-ab0754678a7b",
+        "title": "Wood and stone place",
+        "type": "hotel",
+        "price": 495,
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/7.jpg",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85661,
+            "longitude": 2.351499
+          }
+        },
+        "location": {
+          "latitude": 48.837610000000005,
+          "longitude": 2.3454990000000002
+        },
+        "isFavorite": false,
+        "isPremium": false,
+        "rating": 3.6
+      },
+      {
+        "id": "954f3eeb-e66b-4c3e-a05e-da6a97a53d52",
+        "title": "Penthouse, 4-5 rooms + 5 balconies",
+        "type": "hotel",
+        "price": 379,
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/8.jpg",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85661,
+            "longitude": 2.351499
+          }
+        },
+        "location": {
+          "latitude": 48.84761,
+          "longitude": 2.356499
+        },
+        "isFavorite": false,
+        "isPremium": true,
+        "rating": 3.9
+      },
+      {
+        "id": "876286d7-d282-44f2-9006-7f018e7fb88c",
+        "title": "The Joshua Tree House",
+        "type": "apartment",
+        "price": 361,
+        "previewImage": "https://15.design.htmlacademy.pro/static/hotel/20.jpg",
+        "city": {
+          "name": "Paris",
+          "location": {
+            "latitude": 48.85661,
+            "longitude": 2.351499
+          }
+        },
+        "location": {
+          "latitude": 48.862610000000004,
+          "longitude": 2.369499
+        },
+        "isFavorite": false,
+        "isPremium": true,
+        "rating": 2.9
       }
-    },
-    "location": {
-      "latitude": 48.868610000000004,
-      "longitude": 2.342499,
-      "zoom": 16
-    },
-    "isFavorite": false,
-    "isPremium": true,
-    "rating": 3.2
-  },
-  {
-    "id": "c4e55e09-559f-442f-99c1-a28452c50681",
-    "title": "Perfectly located Castro",
-    "type": "hotel",
-    "price": 369,
-    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/7.jpg",
-    "city": {
-      "name": "Paris",
-      "location": {
-        "latitude": 48.85661,
-        "longitude": 2.351499,
-        "zoom": 13
-      }
-    },
-    "location": {
-      "latitude": 48.858610000000006,
-      "longitude": 2.330499,
-      "zoom": 16
-    },
-    "isFavorite": false,
-    "isPremium": true,
-    "rating": 1.6
-  },
-  {
-    "id": "d92a06d6-586e-4740-8010-c7024c11002f",
-    "title": "Wood and stone place",
-    "type": "apartment",
-    "price": 267,
-    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/1.jpg",
-    "city": {
-      "name": "Paris",
-      "location": {
-        "latitude": 48.85661,
-        "longitude": 2.351499,
-        "zoom": 13
-      }
-    },
-    "location": {
-      "latitude": 48.834610000000005,
-      "longitude": 2.335499,
-      "zoom": 16
-    },
-    "isFavorite": false,
-    "isPremium": false,
-    "rating": 3.7
-  },
-  {
-    "id": "1a584572-55a3-47a0-a15d-23df237913f5",
-    "title": "Perfectly located Castro",
-    "type": "room",
-    "price": 216,
-    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/17.jpg",
-    "city": {
-      "name": "Paris",
-      "location": {
-        "latitude": 48.85661,
-        "longitude": 2.351499,
-        "zoom": 13
-      }
-    },
-    "location": {
-      "latitude": 48.85761,
-      "longitude": 2.358499,
-      "zoom": 16
-    },
-    "isFavorite": false,
-    "isPremium": true,
-    "rating": 1.6
-  },
-  {
-    "id": "5af7cb7d-6a06-4704-9826-abd03c167ed4",
-    "title": "Wood and stone place",
-    "type": "room",
-    "price": 137,
-    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/8.jpg",
-    "city": {
-      "name": "Paris",
-      "location": {
-        "latitude": 48.85661,
-        "longitude": 2.351499,
-        "zoom": 13
-      }
-    },
-    "location": {
-      "latitude": 48.87561,
-      "longitude": 2.375499,
-      "zoom": 16
-    },
-    "isFavorite": false,
-    "isPremium": true,
-    "rating": 4.3
-  },
-  {
-    "id": "ed61fcbd-034d-4a4c-96c9-c26fbdcabc3b",
-    "title": "Tile House",
-    "type": "apartment",
-    "price": 144,
-    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/9.jpg",
-    "city": {
-      "name": "Paris",
-      "location": {
-        "latitude": 48.85661,
-        "longitude": 2.351499,
-        "zoom": 13
-      }
-    },
-    "location": {
-      "latitude": 48.87961000000001,
-      "longitude": 2.353499,
-      "zoom": 16
-    },
-    "isFavorite": false,
-    "isPremium": true,
-    "rating": 4
-  },
-  {
-    "id": "db4a925a-d0cd-47d0-afce-56c6a5d8fa55",
-    "title": "Beautiful & luxurious apartment at great location",
-    "type": "house",
-    "price": 728,
-    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/20.jpg",
-    "city": {
-      "name": "Paris",
-      "location": {
-        "latitude": 48.85661,
-        "longitude": 2.351499,
-        "zoom": 13
-      }
-    },
-    "location": {
-      "latitude": 48.834610000000005,
-      "longitude": 2.364499,
-      "zoom": 16
-    },
-    "isFavorite": false,
-    "isPremium": false,
-    "rating": 4.5
-  },
-  {
-    "id": "f8c107b7-4a53-4169-bb35-ab0754678a7b",
-    "title": "Wood and stone place",
-    "type": "hotel",
-    "price": 495,
-    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/7.jpg",
-    "city": {
-      "name": "Paris",
-      "location": {
-        "latitude": 48.85661,
-        "longitude": 2.351499,
-        "zoom": 13
-      }
-    },
-    "location": {
-      "latitude": 48.837610000000005,
-      "longitude": 2.3454990000000002,
-      "zoom": 16
-    },
-    "isFavorite": false,
-    "isPremium": false,
-    "rating": 3.6
-  },
-  {
-    "id": "954f3eeb-e66b-4c3e-a05e-da6a97a53d52",
-    "title": "Penthouse, 4-5 rooms + 5 balconies",
-    "type": "hotel",
-    "price": 379,
-    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/8.jpg",
-    "city": {
-      "name": "Paris",
-      "location": {
-        "latitude": 48.85661,
-        "longitude": 2.351499,
-        "zoom": 13
-      }
-    },
-    "location": {
-      "latitude": 48.84761,
-      "longitude": 2.356499,
-      "zoom": 16
-    },
-    "isFavorite": false,
-    "isPremium": true,
-    "rating": 3.9
-  },
-  {
-    "id": "876286d7-d282-44f2-9006-7f018e7fb88c",
-    "title": "The Joshua Tree House",
-    "type": "apartment",
-    "price": 361,
-    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/20.jpg",
-    "city": {
-      "name": "Paris",
-      "location": {
-        "latitude": 48.85661,
-        "longitude": 2.351499,
-        "zoom": 13
-      }
-    },
-    "location": {
-      "latitude": 48.862610000000004,
-      "longitude": 2.369499,
-      "zoom": 16
-    },
-    "isFavorite": false,
-    "isPremium": true,
-    "rating": 2.9
+    ]
   }
-]
+}
