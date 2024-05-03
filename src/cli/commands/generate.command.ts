@@ -1,6 +1,5 @@
 import got from 'got';
 import { Command } from './command.interface.js';
-import { appendFile } from 'node:fs/promises';
 import { TSVOfferGenerator } from '../../shared/libs/offer-generator/index.js';
 import { getErrorMessage } from '../../shared/helpers/index.js';
 import { TSVFileWriter } from '../../shared/libs/file-writer/index.js';
