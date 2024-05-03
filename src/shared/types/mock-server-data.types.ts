@@ -1,25 +1,21 @@
 import { TCity } from './city.type.js';
-import { EGoodType, EOfferType } from './enums.js';
+import { EGoodType, EOfferType , EUserType} from './enums.js';
 import { TLocation } from './location.type.js';
-import { IUser } from './user.type.js';
 
-export interface IMockServerData {
-  id: string;
-  title: string;
-  description: string;
-  postDate: Date;
-  city: TCity;
-  previewImage: string;
+export interface MockServerData {
+  titles: string[];
+  descriptions: string[];
+  cities: TCity[];
+  previewImages: string[];
   images: string[];
-  isPremium: boolean;
-  isFavorite: boolean;
-  rating: number;
-  type: EOfferType;
-  bedrooms: number;
-  maxAdults: number;
-  price: number;
+  isPremium: boolean[];
+  isFavorite: boolean[];
+  types: EOfferType[];
   goods: EGoodType[];
-  user: IUser;
-  numberOfComments: number;
-  location: TLocation;
+  hostNames: string[];
+  hostEmails: string[];
+  hostAvatarUrls: string[];
+  hostPasswords: string[];
+  hostTypes: EUserType[];
+  locations: TLocation[];
 }
