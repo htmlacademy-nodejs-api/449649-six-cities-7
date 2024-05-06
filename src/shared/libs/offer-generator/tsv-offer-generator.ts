@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { GeneratorConfig } from './generator-config.js';
+import { GENERATOR_CONFIG } from './generator-config.js';
 import { OfferGenerator } from './offer-generator.interface.js';
 import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
 import { TMockServerData } from '../../types/mock-server-data.types.js';
@@ -11,18 +11,18 @@ export class TSVOfferGenerator implements OfferGenerator {
     const title = getRandomItem<string>(this.mockData.titles);
     const description = getRandomItem<string>(this.mockData.descriptions);
     const postDate = dayjs()
-      .subtract(generateRandomValue(GeneratorConfig.FirstWeekDay, GeneratorConfig.LastWeekDay), 'day')
+      .subtract(generateRandomValue(GENERATOR_CONFIG.FIRST_WEEK_DAY, GENERATOR_CONFIG.LAST_WEEK_DAY), 'day')
       .toISOString();
     const city = getRandomItem(this.mockData.cities);
     const previewImage = getRandomItem(this.mockData.previewImages);
     const images = getRandomItems(this.mockData.previewImages).join(',');
     const isPremium = getRandomItem(this.mockData.isPremium);
     const isFavorite = getRandomItem(this.mockData.isFavorite);
-    const rating = generateRandomValue(GeneratorConfig.MinRating, GeneratorConfig.MaxRating);
+    const rating = generateRandomValue(GENERATOR_CONFIG.MIN_RATING, GENERATOR_CONFIG.MAX_RATING);
     const type = getRandomItem(this.mockData.types);
-    const room = generateRandomValue(GeneratorConfig.MinRoom, GeneratorConfig.MaxRoom);
-    const bedroom = generateRandomValue(GeneratorConfig.MinBedroom, GeneratorConfig.MaxBedroom);
-    const price = generateRandomValue(GeneratorConfig.MinPrice, GeneratorConfig.MaxPrice);
+    const room = generateRandomValue(GENERATOR_CONFIG.MIN_ROOM, GENERATOR_CONFIG.MAX_ROOM);
+    const bedroom = generateRandomValue(GENERATOR_CONFIG.MIN_BEDROOM, GENERATOR_CONFIG.MAX_BEDROOM);
+    const price = generateRandomValue(GENERATOR_CONFIG.MIN_PRICE, GENERATOR_CONFIG.MAX_PRICE);
     const goods = getRandomItems(this.mockData.goods).join(',');
     const hostName = getRandomItem(this.mockData.hostNames);
     const hostEmail = getRandomItem(this.mockData.hostEmails);

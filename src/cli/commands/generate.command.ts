@@ -19,9 +19,12 @@ export class GenerateCommand implements Command {
   private async write(filepath: string, offerCount: number) {
     const tsvOfferGenerator = new TSVOfferGenerator(this.initialData);
     const tsvFileWriter = new TSVFileWriter(filepath);
+    const queue = [];
     for (let i = 0; i < offerCount; i++) {
-      await tsvFileWriter.write(tsvOfferGenerator.generate());
+      queue.push(tsvFileWriter.write(tsvOfferGenerator.generate()));
     }
+
+    await Promise.all(queue);
   }
 
   public getName(): string {
@@ -30,7 +33,18 @@ export class GenerateCommand implements Command {
 
   public async execute(...parameters: string[]): Promise<void> {
     const [count, filepath, url] = parameters;
+    if (!count || isNaN(Number(count))) {
+      throw new Error('Invalid count provided. Please provide a valid number.');
+    }
     const offerCount = Number.parseInt(count, 10);
+
+    if (!filepath || typeof filepath !== 'string' || filepath.trim() === '') {
+      throw new Error('Invalid filepath provided. Please provide a valid filepath.');
+    }
+
+    if (!url || typeof url !== 'string' || !url.startsWith('http://') && !url.startsWith('https://')) {
+      throw new Error('Invalid URL provided. Please provide a valid URL.');
+    }
 
     try {
       await this.load(url);
