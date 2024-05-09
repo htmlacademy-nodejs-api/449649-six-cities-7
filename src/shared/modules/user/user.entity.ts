@@ -1,9 +1,9 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
+import { defaultClasses, getModelForClass, prop } from '@typegoose/typegoose';
 
 import { IUser } from '../../types/index.js';
 import { EUserType } from '../../types/enums.js';
 
-export class UserEntity implements IUser {
+export class UserEntity extends defaultClasses.TimeStamps implements IUser {
   @prop({ required: true })
   public name: string;
 
