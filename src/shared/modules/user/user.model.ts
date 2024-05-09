@@ -8,12 +8,22 @@ export interface UserDocument extends IUser, Document {
 }
 
 const userSchema = new Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true,
+    minlength: [2, 'Min length for firstname is 2']
+  },
   email: {
     type: String,
     unique: true,
+    match: [/^([\w-\\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Email is incorrect'],
+    required: true
   },
-  avatarPath: String,
+  avatarPath: {
+    type: String,
+    required: true,
+    minlength: [5, 'Min length for avatar path is 5'],
+  },
   password: String,
   type: EUserType,
 }, { timestamps: true });
