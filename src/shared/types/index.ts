@@ -5,3 +5,4 @@ export { TLocation } from './location.type.js';
 export { TMockServerData } from './mock-server-data.types.js';
 export { IOffer } from './offer.type.js';
 export { IUser } from './user.type.js';
+export { EComponent } from './component.enum.js';

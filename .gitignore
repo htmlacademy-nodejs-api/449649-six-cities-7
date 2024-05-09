@@ -9,3 +9,4 @@ mocks/mock-data.tsv
 .DS_Store
 coverage
 *.log
+.env
