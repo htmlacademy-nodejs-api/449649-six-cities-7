@@ -38,7 +38,6 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       name,
       email,
       avatarPath,
-      password,
       userType,
       numberOfComments,
       latitude,
@@ -61,7 +60,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       maxAdults: parseInt(maxAdults, 10),
       price: this.parsePrice(price),
       goods: this.parseGoods(goods),
-      user: this.parseUser(name, email, avatarPath, password, userType),
+      user: this.parseUser(name, email, avatarPath, userType),
       numberOfComments: parseInt(numberOfComments, 10),
       location: this.parseLocation(latitude, longitude)
     };
@@ -108,7 +107,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     return { latitude, longitude };
   }
 
-  private parseUser(name: string, email: string, avatarPath: string, password: string, userType: string): IUser {
+  private parseUser(name: string, email: string, avatarPath: string, userType: string): IUser {
     let type = userType.toLowerCase();
     if (type in EUserType) {
       type = type as EUserType;
@@ -120,7 +119,6 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       name: name,
       email: email,
       avatarPath: avatarPath,
-      password: password,
       type: type as EUserType
     };
   }

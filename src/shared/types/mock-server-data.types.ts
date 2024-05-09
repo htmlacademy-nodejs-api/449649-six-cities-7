@@ -15,7 +15,6 @@ export type TMockServerData = {
   hostNames: string[];
   hostEmails: string[];
   hostAvatarUrls: string[];
-  hostPasswords: string[];
   hostTypes: EUserType[];
   locations: TLocation[];
 }
