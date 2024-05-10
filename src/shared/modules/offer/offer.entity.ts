@@ -1,6 +1,8 @@
 import { defaultClasses, getModelForClass, prop, modelOptions, Ref } from '@typegoose/typegoose';
 import { validateCity, validateGoodType, validateOfferType } from './offer-helper.js';
 import { UserEntity } from '../user/user.entity.js';
+import { CityEntity } from '../city/city.entity.js';
+import { LocationEntity } from '../location/location.entity.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
@@ -24,13 +26,14 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public postDate: Date;
 
   @prop({
+    ref: CityEntity,
     required: true,
     validate: {
       validator: validateCity,
       message: 'Invalid city name'
     },
   })
-  public city: string;
+  public city: Ref<CityEntity>;
 
   @prop({ required: true, type: String})
   public previewImage: string;
@@ -59,6 +62,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
       message: 'Rating must be a number from 1 to 5 with one decimal place allowed'
     },
   })
+  public rating: number;
 
   @prop({
     required: true,
@@ -86,14 +90,14 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     }})
   public goods: string[];
 
-  @prop({ required: true, ref: () => UserEntity })
-  public user: Ref<UserEntity>;
+  @prop({ required: true, ref: UserEntity })
+  public userId!: Ref<UserEntity>;
 
   @prop({ required: false })
   public numberOfComments: number;
 
-  @prop({ required: true })
-  public location: string;
+  @prop({ required: true, ref: LocationEntity })
+  public locationId!: Ref<LocationEntity>;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

@@ -1,4 +1,4 @@
-import { DocumentType } from '@typegoose/typegoose';
+import { DocumentType, types } from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
 
 import { UserService } from './user-service.interface.js';
