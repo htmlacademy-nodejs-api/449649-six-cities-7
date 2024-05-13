@@ -1,4 +1,4 @@
-import { defaultClasses, getModelForClass, prop, modelOptions } from '@typegoose/typegoose';
+import { defaultClasses, getModelForClass, prop, modelOptions, Ref } from '@typegoose/typegoose';
 
 import { TCity } from '../../types/city.type.js';
 import { TLocation } from '../../types/location.type.js';
@@ -16,17 +16,21 @@ export interface CityEntity extends defaultClasses.Base {}
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class CityEntity extends defaultClasses.TimeStamps implements TCity {
-  @prop({ required: true })
+  @prop({required: true, trim: true, unique: true})
   public name: string;
 
-  @prop({ required: true, type: () => LocationEntity })
+  @prop({ required: true, LocationEntity })
   public location: TLocation;
 
-  constructor(cityData: TCity) {
+  @prop({required: true, ref: LocationEntity})
+  public locationId: Ref<LocationEntity>;
+
+  constructor(cityData: TCity, locationId: Ref<LocationEntity>) {
     super();
 
     this.name = cityData.name;
     this.location = cityData.location;
+    this.locationId = locationId;
   }
 }
 

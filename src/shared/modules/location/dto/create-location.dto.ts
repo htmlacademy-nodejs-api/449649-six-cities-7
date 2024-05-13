@@ -1,4 +1,4 @@
 export class CreateLocationDto {
-  latitude: number;
-  longitude: number;
+  public latitude: number;
+  public longitude: number;
 }

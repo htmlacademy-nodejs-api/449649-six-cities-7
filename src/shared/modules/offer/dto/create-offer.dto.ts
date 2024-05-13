@@ -1,11 +1,10 @@
 import { EGoodType, EOfferType } from '../../../types/enums.js';
 
 export class CreateOfferDto {
-  public id: string;
   public title: string;
   public description: string;
   public postDate: Date;
-  public city: string;
+  public cityId: string;
   public previewImage: string;
   public images: string[];
   public isPremium: boolean;
@@ -18,4 +17,5 @@ export class CreateOfferDto {
   public goods: EGoodType[];
   public numberOfComments: number;
   public userId: string;
+  public locationId: string;
 }
