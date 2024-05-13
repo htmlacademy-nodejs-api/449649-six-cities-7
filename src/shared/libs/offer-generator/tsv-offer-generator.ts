@@ -27,14 +27,13 @@ export class TSVOfferGenerator implements OfferGenerator {
     const hostName = getRandomItem(this.mockData.hostNames);
     const hostEmail = getRandomItem(this.mockData.hostEmails);
     const hostAvatar = getRandomItem(this.mockData.hostAvatarUrls);
-    const hostPassword = getRandomItem(this.mockData.hostPasswords);
     const hostType = getRandomItem(this.mockData.hostTypes);
     const location = getRandomItem(this.mockData.locations);
 
     return [
       title, description, postDate, city.name, city.location.latitude, city.location.longitude,
       previewImage, images, isPremium, isFavorite, rating, type, room, bedroom, price, goods,
-      hostName, hostEmail, hostAvatar, hostPassword, hostType, location.latitude, location.longitude
+      hostName, hostEmail, hostAvatar, hostType, location.latitude, location.longitude
     ].join('\t');
   }
 }

@@ -3,7 +3,7 @@ import { types } from '@typegoose/typegoose';
 
 import { EComponent } from '../../types/component.enum.js';
 import { CityService } from './city.service.interface.js';
-import { DefaultCityService } from './city.service.js';
+import { DefaultCityService } from './default-city.service.js';
 import { CityEntity, CityModel } from './city.entity.js';
 
 export function createCityContainer() {
