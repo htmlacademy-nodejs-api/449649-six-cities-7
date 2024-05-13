@@ -46,6 +46,7 @@ export class ImportCommand implements Command {
       ...offer.user,
       password: DEFAULT_USER_PASSWORD
     }, this.salt);
+    console.log(user);
 
     const location = await this.locationService.findLocationOrCreate({...offer.location});
     const city = await this.cityService.findCityorCreate({...offer.city});
@@ -54,7 +55,7 @@ export class ImportCommand implements Command {
       title: offer.title,
       description: offer.description,
       postDate: offer.postDate,
-      cityId: city.id,
+      city: city,
       previewImage: offer.previewImage,
       images: offer.images,
       isPremium: offer.isPremium,
@@ -66,8 +67,8 @@ export class ImportCommand implements Command {
       price: offer.price,
       goods: offer.goods,
       numberOfComments: offer.numberOfComments,
-      userId: user.id,
-      locationId: location.id,
+      user: user,
+      location: location,
     });
   }
 

@@ -3,6 +3,10 @@ import { validateCity, validateGoodType, validateOfferType } from './offer-helpe
 import { UserEntity } from '../user/user.entity.js';
 import { CityEntity } from '../city/city.entity.js';
 import { LocationEntity } from '../location/location.entity.js';
+import { TCity } from '../../types/city.type.js';
+import { IUser } from '../../types/user.type.js';
+import { TLocation } from '../../types/location.type.js';
+import { IOffer } from '../../types/offer.type.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
@@ -33,7 +37,9 @@ export class OfferEntity extends defaultClasses.TimeStamps {
       message: 'Invalid city name'
     },
   })
-  public city: Ref<CityEntity>;
+  public cityId: Ref<CityEntity>;
+
+  public city: TCity;
 
   @prop({ required: true, type: String})
   public previewImage: string;
@@ -90,14 +96,47 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     }})
   public goods: string[];
 
-  @prop({ required: true, ref: UserEntity })
-  public user!: Ref<UserEntity>;
+  @prop({required: true, ref: UserEntity})
+  public userId: Ref<UserEntity>;
+
+  public user: IUser;
 
   @prop({ required: false })
   public numberOfComments: number;
 
   @prop({ required: true, ref: LocationEntity })
   public locationId!: Ref<LocationEntity>;
+
+  public location: TLocation;
+
+  constructor(
+    offerData: IOffer,
+    cityId: Ref<CityEntity>,
+    userId: Ref<UserEntity>,
+    locationId: Ref<LocationEntity>
+  ) {
+    super();
+    this.title = offerData.title;
+    this.description = offerData.description;
+    this.postDate = offerData.postDate;
+    this.city = offerData.city;
+    this.cityId = cityId;
+    this.previewImage = offerData.previewImage;
+    this.images = offerData.images;
+    this.isPremium = offerData.isPremium;
+    this.isFavorite = offerData.isFavorite;
+    this.rating = offerData.rating;
+    this.type = offerData.type;
+    this.bedrooms = offerData.bedrooms;
+    this.maxAdults = offerData.maxAdults;
+    this.price = offerData.price;
+    this.goods = offerData.goods;
+    this.user = offerData.user;
+    this.userId = userId;
+    this.numberOfComments = offerData.numberOfComments;
+    this.location = offerData.location;
+    this.locationId = locationId;
+  }
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

@@ -1,10 +1,13 @@
+import { TCity } from '../../../types/city.type.js';
 import { EGoodType, EOfferType } from '../../../types/enums.js';
+import { TLocation } from '../../../types/location.type.js';
+import { IUser } from '../../../types/user.type.js';
 
 export class CreateOfferDto {
   public title: string;
   public description: string;
   public postDate: Date;
-  public cityId: string;
+  public city: TCity;
   public previewImage: string;
   public images: string[];
   public isPremium: boolean;
@@ -16,6 +19,6 @@ export class CreateOfferDto {
   public price: number;
   public goods: EGoodType[];
   public numberOfComments: number;
-  public userId: string;
-  public locationId: string;
+  public user: IUser;
+  public location: TLocation;
 }
