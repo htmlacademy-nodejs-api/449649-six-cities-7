@@ -6,7 +6,6 @@ import { IOffer } from '../../types/offer.type.js';
 import { TCity } from '../../types/city.type.js';
 import { ECityName, EGoodType, EOfferType, EUserType } from '../../types/enums.js';
 import { TLocation } from '../../types/location.type.js';
-import { CITIES } from '../../types/cities.type.js';
 import { IUser } from '../../types/user.type.js';
 
 export class TSVFileReader extends EventEmitter implements FileReader {
@@ -20,11 +19,12 @@ export class TSVFileReader extends EventEmitter implements FileReader {
 
   private parseLineToOffer(line: string): IOffer {
     const [
-      id,
       title,
       description,
       postDate,
-      city,
+      cityName,
+      cityLatitude,
+      cityLongitude,
       previewImage,
       images,
       isPremium,
@@ -45,11 +45,10 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     ] = line.split('\t');
 
     return {
-      id,
       title,
       description,
       postDate: new Date(postDate),
-      city: this.parseCity(city),
+      city: this.parseCity(cityName, cityLatitude, cityLongitude),
       previewImage: previewImage,
       images: this.parseImages(images),
       isPremium: !!isPremium,
@@ -70,10 +69,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     return goodsString.split(';').filter((good) => good in EGoodType) as EGoodType[];
   }
 
-  private parseCity(cityName: string): TCity {
+  private parseCity(cityName: string, cityLatitude: string, cityLongitude: string): TCity {
     if (Object.values(ECityName).includes(cityName as ECityName)) {
-      const location: TLocation = CITIES[cityName as ECityName];
-      return { name: cityName, location };
+      return { name: cityName, location: {latitude: Number(cityLatitude), longitude: Number(cityLongitude)} };
     } else {
       console.error(`Unknown city name: ${cityName}`);
       return { name: cityName, location: { latitude: 0, longitude: 0 } };
@@ -83,13 +81,14 @@ export class TSVFileReader extends EventEmitter implements FileReader {
   private parseOfferType(typeString: string): EOfferType {
     const normalizedType = typeString.toLowerCase();
 
-    if (normalizedType in EOfferType) {
+    if (Object.values(EOfferType).includes(normalizedType as EOfferType)) {
       return normalizedType as EOfferType;
     } else {
       console.error(`Unknown offer type: ${typeString}`);
       return EOfferType.APARTMENT;
     }
   }
+
 
   private parseImages(imagesString: string): string[] {
     return imagesString.split(';').map((imageUrl) => imageUrl.trim());
@@ -101,25 +100,25 @@ export class TSVFileReader extends EventEmitter implements FileReader {
   }
 
   private parseLocation(latitudeStr: string, longitudeStr: string): TLocation {
-    const latitude = parseFloat(latitudeStr);
-    const longitude = parseFloat(longitudeStr);
+    const latitude = Number(latitudeStr);
+    const longitude = Number(longitudeStr);
 
     return { latitude, longitude };
   }
 
   private parseUser(name: string, email: string, avatarPath: string, userType: string): IUser {
-    let type = userType.toLowerCase();
-    if (type in EUserType) {
-      type = type as EUserType;
-    } else {
+    let type = EUserType[userType.toUpperCase() as keyof typeof EUserType] as EUserType;
+
+    if (type === undefined) {
       console.error(`Unknown user type: ${userType}`);
       type = EUserType.BASIC;
     }
+
     return {
       name: name,
       email: email,
       avatarPath: avatarPath,
-      type: type as EUserType
+      type: type
     };
   }
 

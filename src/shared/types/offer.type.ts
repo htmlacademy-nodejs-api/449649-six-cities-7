@@ -4,7 +4,6 @@ import { TLocation } from './location.type.js';
 import { IUser } from './user.type.js';
 
 export interface IOffer {
-  id: string;
   title: string;
   description: string;
   postDate: Date;
