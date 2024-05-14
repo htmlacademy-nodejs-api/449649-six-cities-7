@@ -46,7 +46,6 @@ export class ImportCommand implements Command {
       ...offer.user,
       password: DEFAULT_USER_PASSWORD
     }, this.salt);
-    console.log(user);
 
     const location = await this.locationService.findLocationOrCreate({...offer.location});
     const city = await this.cityService.findCityorCreate({...offer.city});
@@ -84,6 +83,8 @@ export class ImportCommand implements Command {
     await this.databaseClient.connect(uri);
 
     const fileReader = new TSVFileReader(filename.trim());
+    fileReader.on('line', this.onImportedOffer);
+    fileReader.on('end', this.onCompleteImport);
 
     try {
       fileReader.read();
