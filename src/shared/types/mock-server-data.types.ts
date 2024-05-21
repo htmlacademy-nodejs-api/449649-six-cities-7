@@ -1,20 +1,17 @@
-import { TCity } from './city.type.js';
-import { EGoodType, EOfferType , EUserType} from './enums.js';
-import { TLocation } from './location.type.js';
-
 export type TMockServerData = {
   titles: string[];
   descriptions: string[];
-  cities: TCity[];
+  postDates: string[];
+  cities: string[];
   previewImages: string[];
   images: string[];
-  isPremium: boolean[];
-  isFavorite: boolean[];
-  types: EOfferType[];
-  goods: EGoodType[];
+  isPremium: string[];
+  types: string[];
+  goods: string[];
   hostNames: string[];
   hostEmails: string[];
   hostAvatarUrls: string[];
-  hostTypes: EUserType[];
-  locations: TLocation[];
+  hostTypes: string[];
+  numberOfComments: string[];
+  locations: string[];
 }

@@ -12,7 +12,7 @@ export class DefaultOfferService implements OfferService {
   constructor(
     @inject(EComponent.Logger) private readonly logger: Logger,
     @inject(EComponent.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>
-  ) {}
+  ) { }
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
     const result = await this.offerModel.create(dto);
@@ -25,6 +25,10 @@ export class DefaultOfferService implements OfferService {
     return this.offerModel.findById(offerId).exec();
   }
 
+  public async findByOfferName(offerName: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel.findOne({ name: offerName }).exec();
+  }
+
   public async findOffersByCity(city: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel.find({ city }).exec();
   }
@@ -33,8 +37,8 @@ export class DefaultOfferService implements OfferService {
     return this.offerModel.find({ userId }).exec();
   }
 
-  public async getAllOffers(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.find().exec();
+  public async findByOfferNameOrCreate(offerName: string, createOfferDto: CreateOfferDto,): Promise<DocumentType<OfferEntity>> {
+    return (await this.findByOfferName(offerName)) || (await this.create(createOfferDto));
   }
 
   public async update(offerId: string, dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {

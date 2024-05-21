@@ -7,6 +7,8 @@ export const GENERATOR_CONFIG = {
   MAX_ROOM: 6,
   MIN_PRICE: 10,
   MAX_PRICE: 1000,
+  MIN_COMMENTS: 1,
+  MAX_COMMENTS: 100,
   FIRST_WEEK_DAY: 1,
   LAST_WEEK_DAY: 7
 } as const;

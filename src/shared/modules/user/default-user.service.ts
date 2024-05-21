@@ -14,7 +14,7 @@ export class DefaultUserService implements UserService {
     @inject(EComponent.UserModel) private readonly userModel: types.ModelType<UserEntity>
   ) { }
 
-  public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
+  public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<Omit<UserEntity, 'password'>>> {
     const user = new UserEntity(dto);
     user.setPassword(dto.password, salt);
 
@@ -28,13 +28,9 @@ export class DefaultUserService implements UserService {
     return this.userModel.findOne({ email });
   }
 
-  public async findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
-    const existedUser = await this.findByEmail(dto.email);
-
-    if (existedUser) {
-      return existedUser;
-    }
-
-    return this.create(dto, salt);
+  public async findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<Omit<UserEntity, 'password'>>> {
+    return (
+      (await this.findByEmail(dto.email)) || (await this.create(dto, salt))
+    );
   }
 }
