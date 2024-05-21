@@ -14,48 +14,12 @@
       "Modern studio with designer renovation, a bar counter, and built-in wardrobes. Located in a quiet area, ideal for those who value comfort and privacy."
     ],
     "cities": [
-      {
-        "name": "Paris",
-        "location": {
-          "latitude": 48.85661,
-          "longitude": 2.351499
-        }
-      },
-      {
-        "name": "Cologne",
-        "location": {
-          "latitude": 50.938361,
-          "longitude": 6.959974
-        }
-      },
-      {
-        "name": "Brussels",
-        "location": {
-          "latitude": 50.846557,
-          "longitude": 4.351697
-        }
-      },
-      {
-        "name": "Amsterdam",
-        "location": {
-          "latitude": 52.370216,
-          "longitude": 4.895168
-        }
-      },
-      {
-        "name": "Hamburg",
-        "location": {
-          "latitude": 53.550341,
-          "longitude": 10.000654
-        }
-      },
-      {
-        "name": "Dusseldorf",
-        "location": {
-          "latitude": 51.225402,
-          "longitude": 6.776314
-        }
-      }
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg",
+      "Dusseldorf"
     ],
     "previewImages": [
       "https://15.design.htmlacademy.pro/static/hotel/1.jpg",
@@ -67,10 +31,6 @@
       "https://15.design.htmlacademy.pro/static/hotel/.jpg"
     ],
     "isPremium": [
-      true,
-      false
-    ],
-    "isFavorite": [
       true,
       false
     ],
@@ -118,8 +78,8 @@
       "password5"
     ],
     "hostTypes": [
-      "обычный",
-      "pro"
+      "Обычный",
+      "Pro"
     ],
     "locations": [
       {
@@ -162,6 +122,13 @@
         "latitude": 52.370216,
         "longitude": 4.895168
       }
+    ],
+    "numberOfComments": [
+      25,
+      35,
+      23,
+      47,
+      13
     ]
   }
 }

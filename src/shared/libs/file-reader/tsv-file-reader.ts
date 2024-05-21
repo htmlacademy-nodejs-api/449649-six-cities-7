@@ -1,34 +1,27 @@
 import EventEmitter from 'node:events';
 import { createReadStream } from 'node:fs';
-
 import { FileReader } from './file-reader.interface.js';
-import { IOffer } from '../../types/offer.type.js';
-import { TCity } from '../../types/city.type.js';
 import { ECityName, EGoodType, EOfferType, EUserType } from '../../types/enums.js';
-import { TLocation } from '../../types/location.type.js';
-import { CITIES } from '../../types/cities.type.js';
+import { IOffer } from '../../types/offer.type.js';
 import { IUser } from '../../types/user.type.js';
+import { TLocation } from '../../types/location.type.js';
 
 export class TSVFileReader extends EventEmitter implements FileReader {
   private CHUNK_SIZE = 16384; // 16KB
 
-  constructor(
-    private readonly filename: string
-  ) {
+  constructor(private readonly filename: string) {
     super();
   }
 
   private parseLineToOffer(line: string): IOffer {
     const [
-      id,
       title,
       description,
-      postDate,
+      postdate,
       city,
       previewImage,
       images,
       isPremium,
-      isFavorite,
       rating,
       type,
       bedrooms,
@@ -38,91 +31,42 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       name,
       email,
       avatarPath,
-      password,
       userType,
       numberOfComments,
-      latitude,
-      longitude
+      latitudeStr,
+      longitudeStr
     ] = line.split('\t');
 
     return {
-      id,
       title,
       description,
-      postDate: new Date(postDate),
-      city: this.parseCity(city),
-      previewImage: previewImage,
-      images: this.parseImages(images),
+      postDate: new Date(postdate),
+      city: city as ECityName,
+      previewImage,
+      images: this.parseListString(images),
       isPremium: !!isPremium,
-      isFavorite: !!isFavorite,
-      rating: parseInt(rating, 10),
-      type: this.parseOfferType(type),
+      rating: parseFloat(rating),
+      type: type as EOfferType,
       bedrooms: parseInt(bedrooms, 10),
       maxAdults: parseInt(maxAdults, 10),
-      price: this.parsePrice(price),
-      goods: this.parseGoods(goods),
-      user: this.parseUser(name, email, avatarPath, password, userType),
+      price: parseInt(price, 10),
+      goods: this.parseListString(goods) as EGoodType[],
+      user: this.parseUser(name, email, avatarPath, userType as EUserType),
       numberOfComments: parseInt(numberOfComments, 10),
-      location: this.parseLocation(latitude, longitude)
+      location: this.parseLocation(latitudeStr, longitudeStr)
     };
-  }
-
-  private parseGoods(goodsString: string): EGoodType[] {
-    return goodsString.split(';').filter((good) => good in EGoodType) as EGoodType[];
-  }
-
-  private parseCity(cityName: string): TCity {
-    if (Object.values(ECityName).includes(cityName as ECityName)) {
-      const location: TLocation = CITIES[cityName as ECityName];
-      return { name: cityName, location };
-    } else {
-      console.error(`Unknown city name: ${cityName}`);
-      return { name: cityName, location: { latitude: 0, longitude: 0 } };
-    }
-  }
-
-  private parseOfferType(typeString: string): EOfferType {
-    const normalizedType = typeString.toLowerCase();
-
-    if (normalizedType in EOfferType) {
-      return normalizedType as EOfferType;
-    } else {
-      console.error(`Unknown offer type: ${typeString}`);
-      return EOfferType.APARTMENT;
-    }
-  }
-
-  private parseImages(imagesString: string): string[] {
-    return imagesString.split(';').map((imageUrl) => imageUrl.trim());
-  }
-
-
-  private parsePrice(priceString: string): number {
-    return Number.parseInt(priceString, 10);
   }
 
   private parseLocation(latitudeStr: string, longitudeStr: string): TLocation {
-    const latitude = parseFloat(latitudeStr);
-    const longitude = parseFloat(longitudeStr);
-
-    return { latitude, longitude };
+    return { latitude: Number(latitudeStr), longitude: Number(longitudeStr) };
   }
 
-  private parseUser(name: string, email: string, avatarPath: string, password: string, userType: string): IUser {
-    let type = userType.toLowerCase();
-    if (type in EUserType) {
-      type = type as EUserType;
-    } else {
-      console.error(`Unknown user type: ${userType}`);
-      type = EUserType.BASIC;
-    }
-    return {
-      name: name,
-      email: email,
-      avatarPath: avatarPath,
-      password: password,
-      type: type as EUserType
-    };
+  private parseListString(categoriesString: string): string[] {
+    return categoriesString.split(';').map((item) => item);
+  }
+
+  private parseUser(name: string, email: string, avatarPath: string, userType: EUserType): IUser {
+    return { name, email, avatarPath, type: userType };
   }
 
   public async read(): Promise<void> {
@@ -144,7 +88,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         importedRowCount++;
 
         const parsedOffer = this.parseLineToOffer(completeRow);
-        this.emit('line', parsedOffer);
+        await new Promise((resolve) => {
+          this.emit('line', parsedOffer, resolve);
+        });
       }
     }
 

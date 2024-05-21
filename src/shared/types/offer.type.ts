@@ -1,18 +1,15 @@
-import { TCity } from './city.type.js';
-import { EGoodType, EOfferType } from './enums.js';
+import { ECityName, EGoodType, EOfferType } from './enums.js';
 import { TLocation } from './location.type.js';
 import { IUser } from './user.type.js';
 
 export interface IOffer {
-  id: string;
   title: string;
   description: string;
   postDate: Date;
-  city: TCity;
+  city: ECityName;
   previewImage: string;
   images: string[];
   isPremium: boolean;
-  isFavorite: boolean;
   rating: number;
   type: EOfferType;
   bedrooms: number;
