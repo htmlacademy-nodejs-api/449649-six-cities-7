@@ -1,4 +1,4 @@
-openapi: '3.1.0'
+openapi: 3.1.0
 info:
   title: API сервер для проекта «Шесть Городов».
   description: |-
@@ -21,6 +21,7 @@ paths:
         - users
       summary: Регистрирует нового пользователя.
       description: Регистрирует нового пользователя.
+
       requestBody:
         description: Информация для создания нового пользователя.
         content:
@@ -28,6 +29,7 @@ paths:
             schema:
               $ref: '#/components/schemas/createUser'
         required: true
+
       responses:
         '201':
           description: Пользователь зарегистрирован. Объект пользователя.
@@ -35,6 +37,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
+
         '409':
           description: Пользователь с таким email уже существует.
 
@@ -44,6 +47,7 @@ paths:
         - users
       summary: Авторизует пользователя.
       description: Авторизует пользователя на основе логина и пароля.
+
       requestBody:
         description: Информация для авторизации юзера.
         content:
@@ -51,6 +55,7 @@ paths:
             schema:
               $ref: '#/components/schemas/authUser'
         required: true
+
       responses:
         '200':
           description: Пользователь авторизован.
@@ -58,6 +63,34 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  token:
+                    type: string
+                  refresh_token:
+                    type: string
+
+        '404':
+          description: Пользователь с такими данными не найден.
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя.
+      description: Возвращает информацию по авторизованному пользователю.
+      security:
+        - bearerAuth: []
+
+      responses:
+        '200':
+          description: Пользователь найден. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        '401':
+          description: Пользователь не авторизован.
+
         '404':
           description: Пользователь с такими данными не найден.
 
@@ -66,7 +99,19 @@ paths:
       tags:
         - users
       summary: Загружает аватар для пользователя.
-      description: Загружает аватар для конкретного пользователя. Изображение аватара должно быть в формате `png` или `jpg`.
+      description: Загружает аватар для конкретного пользователя. Изображение
+        аватара должно быть в формате `png` или `jpg`.
+
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+
       requestBody:
         description: Путь к изображению.
         content:
@@ -74,6 +119,7 @@ paths:
             schema:
               $ref: '#/components/schemas/avatarPath'
         required: true
+
       responses:
         '201':
           description: Аватар пользователя загружен.
@@ -81,8 +127,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/avatarPath'
+
         '401':
           description: Пользователь не авторизован.
+
         '404':
           description: Пользователь с переданным id не найден.
 
@@ -92,9 +140,38 @@ paths:
         - offers
       summary: Возвращает список предложений.
       description: Возвращает список предложений.
+
+      parameters:
+        - in: query
+          name: count
+          required: false
+          schema:
+            type: number
+
+        - in: query
+          name: premium
+          required: false
+          schema:
+            type: boolean
+
+        - in: query
+          name: favorite
+          required: false
+          schema:
+            type: boolean
+
       responses:
         '200':
           description: Список предложений.
+          content:
+            application/json:
+              schema:
+                properties:
+                  offers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/offerList'
+
         '404':
           description: Объявления не найдены.
 
@@ -106,6 +183,7 @@ paths:
       description: Создаёт новое предложение.
       security:
         - bearerAuth: []
+
       requestBody:
         description: Информация для создания нового предложения.
         content:
@@ -113,6 +191,7 @@ paths:
             schema:
               $ref: '#/components/schemas/exactOffer'
         required: true
+
       responses:
         '201':
           description: Объявление создано.
@@ -122,6 +201,7 @@ paths:
                 $ref: '#/components/schemas/exactOffer'
         '401':
           description: Пользователь не авторизован.
+
         '409':
           description: Объявление не создано из-за ошибки.
 
@@ -131,6 +211,14 @@ paths:
         - offers
       summary: Показывает информацию по предложению
       description: Показывает детальную информацию по существующему предложению
+
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          schema:
+            type: string
+
       responses:
         '200':
           description: Детальная информация по предложению.
@@ -141,6 +229,7 @@ paths:
         '404':
           description: Предложение не найдено
 
+
   /offers/{offerId}/update:
     patch:
       tags:
@@ -149,6 +238,14 @@ paths:
       description: Редактирует существующее предложение.
       security:
         - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          schema:
+            type: string
+
       requestBody:
         description: Информация для редактирования существующего предложения.
         content:
@@ -157,6 +254,7 @@ paths:
               $ref: '#/components/schemas/exactOffer'
         minProperties: 1
         required: true
+
       responses:
         '200':
           description: Предложение обновлено.
@@ -181,6 +279,14 @@ paths:
       description: Удаляет существующее предложение.
       security:
         - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          schema:
+            type: string
+
       responses:
         '200':
           description: Предложение удалено.
@@ -197,6 +303,14 @@ paths:
         - comments
       summary: Список комментариев для предложения.
       description: Возвращает список комментариев для предложения.
+
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          schema:
+            type: string
+
       responses:
         '200':
           description: Комментарии для объявления найдены.
@@ -213,6 +327,16 @@ paths:
         - comments
       summary: Добавляет новый комментарий к предложению.
       description: Добавляет новый комментарий к предложению.
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: offerId
+          required: true
+          schema:
+            type: string
+
       requestBody:
         description: Новый комментарий.
         content:
@@ -220,6 +344,7 @@ paths:
             schema:
               $ref: '#/components/schemas/createComment'
         required: true
+
       responses:
         '201':
           description: Комментарий успешно создан. Объект комментария.
@@ -227,6 +352,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/commentsByOffer'
+
         '401':
           description: Пользователь не авторизован.
         '404':
@@ -288,7 +414,15 @@ components:
           example: avatar.jpg
         type:
           type: string
-          example: Обычный
+          example: обычный
+
+    avatarPath:
+      type: object
+
+      properties:
+        avatarPath:
+          type: string
+          example: 'avatar.jpg'
 
     offerList:
       type: object
@@ -347,9 +481,7 @@ components:
           example: image.jpg
         images:
           type: array
-          items:
-            type: string
-          example: [image1.png, image2.png, image3.png, image4.png, image5.png, image6.png]
+          example: [ image1.png,image2.png, image3.png,image4.png, image5.png, image6.png ]
         isPremium:
           type: boolean
           example: false
@@ -420,10 +552,3 @@ components:
         userId:
           type: string
           example: hfh2hf89hf892h9jf
-
-    avatarPath:
-      type: object
-      properties:
-        avatarPath:
-          type: string
-          example: 'path/to/avatar.jpg'
