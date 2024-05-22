@@ -14,3 +14,84 @@ tags:
     description: Действия с объявлениями.
   - name: comments
     description: Действия с комментариями.
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Регистрирует нового пользователя.
+      description: Регистрирует нового пользователя.
+
+      requestBody:
+        description: Информация для создания нового пользователя.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизует пользователя.
+      description: Авторизует пользователя на основе логина и пароля.
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Выход пользователя из системы.
+      description: Разлогинивает пользователя.
+
+  /users/{userId}/avatar:
+    post:
+      tags:
+        - users
+      summary: Загружает аватар для пользователя.
+      description: Загружает аватар для конкретного пользователя.
+        Изображение аватара должно быть в формате `png` или `jpg`.
+
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Возвращает список предложений.
+      description: Возвращает список предложений.
+
+  /offers/create:
+    post:
+      tags:
+        - offers
+      summary: Создаёт новое предложение.
+      description: Создаёт новое предложение.
+
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Показывает информацию по предложению
+      description: Показывает детальную информацию по существующему предложению
+
+  /offers/{offerId}/update:
+  patch:
+    tags:
+      - offers
+    summary: Редактирует предложение.
+    description: Редактирует существующее предложение.
+
+  /offers/{offerId}/delete:
+    delete:
+      tags:
+        - offers
+      summary: Удаляет предложение
+      description: Удаляет существующее предложение.
+
+  /comments/{offerId}:
+    get:
+      tags:
+        - comments
+      summary: Список комментариев для предложения.
+      description: Возвращает список комментариев для предложения.
+
+  /comments/{offerId}/create:
+    post:
+      tags:
+        - comments
+      summary: Добавляет новый комментарий к предложению.
+      description: Добавляет новый комментарий к предложению.
