@@ -21,9 +21,22 @@ paths:
         - users
       summary: Регистрирует нового пользователя.
       description: Регистрирует нового пользователя.
-
       requestBody:
         description: Информация для создания нового пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+      responses:
+        '201':
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '409':
+          description: Пользователь с таким email уже существует.
 
   /users/login:
     post:
@@ -31,6 +44,22 @@ paths:
         - users
       summary: Авторизует пользователя.
       description: Авторизует пользователя на основе логина и пароля.
+      requestBody:
+        description: Информация для авторизации юзера.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authUser'
+        required: true
+      responses:
+        '200':
+          description: Пользователь авторизован.
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Пользователь с такими данными не найден.
 
   /users/logout:
     post:
@@ -38,14 +67,40 @@ paths:
         - users
       summary: Выход пользователя из системы.
       description: Разлогинивает пользователя.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Пользователь успешно разлогинен.
+        '401':
+          description: Пользователь не авторизован.
+        '404':
+          description: Пользователь с такими данными не найден.
 
   /users/{userId}/avatar:
     post:
       tags:
         - users
       summary: Загружает аватар для пользователя.
-      description: Загружает аватар для конкретного пользователя.
-        Изображение аватара должно быть в формате `png` или `jpg`.
+      description: Загружает аватар для конкретного пользователя. Изображение аватара должно быть в формате `png` или `jpg`.
+      requestBody:
+        description: Путь к изображению.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/avatarPath'
+        required: true
+      responses:
+        '201':
+          description: Аватар пользователя загружен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/avatarPath'
+        '401':
+          description: Пользователь не авторизован.
+        '404':
+          description: Пользователь с переданным id не найден.
 
   /offers:
     get:
@@ -53,6 +108,11 @@ paths:
         - offers
       summary: Возвращает список предложений.
       description: Возвращает список предложений.
+      responses:
+        '200':
+          description: Список предложений.
+        '404':
+          description: Объявления не найдены.
 
   /offers/create:
     post:
@@ -60,6 +120,26 @@ paths:
         - offers
       summary: Создаёт новое предложение.
       description: Создаёт новое предложение.
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Информация для создания нового предложения.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/exactOffer'
+        required: true
+      responses:
+        '201':
+          description: Объявление создано.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/exactOffer'
+        '401':
+          description: Пользователь не авторизован.
+        '409':
+          description: Объявление не создано из-за ошибки.
 
   /offers/{offerId}:
     get:
@@ -67,20 +147,65 @@ paths:
         - offers
       summary: Показывает информацию по предложению
       description: Показывает детальную информацию по существующему предложению
+      responses:
+        '200':
+          description: Детальная информация по предложению.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/exactOffer'
+        '404':
+          description: Предложение не найдено
 
   /offers/{offerId}/update:
-  patch:
-    tags:
-      - offers
-    summary: Редактирует предложение.
-    description: Редактирует существующее предложение.
+    patch:
+      tags:
+        - offers
+      summary: Редактирует предложение.
+      description: Редактирует существующее предложение.
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Информация для редактирования существующего предложения.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/exactOffer'
+        minProperties: 1
+        required: true
+      responses:
+        '200':
+          description: Предложение обновлено.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/exactOffer'
+        '401':
+          description: Пользователь не авторизован.
+        '403':
+          description: Нет прав для реадактирования предложения.
+        '404':
+          description: Предложение не найдено.
+        '409':
+          description: Предложение не обновлено из-за ошибки.
 
   /offers/{offerId}/delete:
     delete:
       tags:
         - offers
-      summary: Удаляет предложение
+      summary: Удаляет предложение.
       description: Удаляет существующее предложение.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Предложение удалено.
+        '401':
+          description: Пользователь не авторизован.
+        '403':
+          description: У пользователя нет прав для удаления этого предложения.
+        '404':
+          description: Предложение не найдено.
 
   /comments/{offerId}:
     get:
@@ -88,6 +213,15 @@ paths:
         - comments
       summary: Список комментариев для предложения.
       description: Возвращает список комментариев для предложения.
+      responses:
+        '200':
+          description: Комментарии для объявления найдены.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/commentsByOffer'
+        '404':
+          description: Комментарии не найдены.
 
   /comments/{offerId}/create:
     post:
@@ -95,3 +229,217 @@ paths:
         - comments
       summary: Добавляет новый комментарий к предложению.
       description: Добавляет новый комментарий к предложению.
+      requestBody:
+        description: Новый комментарий.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createComment'
+        required: true
+      responses:
+        '201':
+          description: Комментарий успешно создан. Объект комментария.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/commentsByOffer'
+        '401':
+          description: Пользователь не авторизован.
+        '404':
+          description: Предложение не найдено.
+        '409':
+          description: Комментарий не создан из-за ошибки.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    createUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+        name:
+          type: string
+          example: Keys
+        password:
+          type: string
+          example: 123456
+        avatarPath:
+          type: string
+          example: 'avatar.jpg'
+        type:
+          type: string
+          example: обычный
+
+    authUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+        password:
+          type: string
+          example: myPassword123
+
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+        name:
+          type: string
+          example: Keys
+        avatarPath:
+          type: string
+          example: avatar.jpg
+        type:
+          type: string
+          example: Обычный
+
+    offerList:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1353р82842р824рр28
+        title:
+          type: string
+          example: Заголовок предложения.
+        postDate:
+          type: string
+          example: 2022-04-11T08:45:40.284Z
+        city:
+          type: string
+          example: Brussels
+        previewImage:
+          type: string
+          example: image.jpg
+        isPremium:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          example: 5
+        propertyType:
+          type: string
+          example: apartment
+        price:
+          type: number
+          example: 300
+        numberOfComments:
+          type: number
+          example: 10
+
+    exactOffer:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1353р82842р824рр28
+        title:
+          type: string
+          example: Заголовок предложения.
+        description:
+          type: string
+          example: good apartments
+        postDate:
+          type: string
+          example: 2022-04-11T08:45:40.284Z
+        city:
+          type: string
+          example: Brussels
+        previewImage:
+          type: string
+          example: image.jpg
+        images:
+          type: array
+          items:
+            type: string
+          example: [image1.png, image2.png, image3.png, image4.png, image5.png, image6.png]
+        isPremium:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          example: 5
+        type:
+          type: string
+          example: apartment
+        bedrooms:
+          type: number
+          example: 2
+        maxAdults:
+          type: number
+          example: 2
+        price:
+          type: number
+          example: 300
+        goods:
+          type: array
+          items:
+            type: string
+          example: [Breakfast, Washer]
+        userId:
+          type: string
+          example: y2t8hf2h28f2fne2jf
+        numberOfComments:
+          type: number
+          example: 10
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              example: 50.846557
+            longitude:
+              type: number
+              example: 4.351697
+
+    createComment:
+      type: object
+      properties:
+        text:
+          type: string
+          example: текст нового комментария
+        rating:
+          type: number
+          example: 1.5
+        userId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+    commentsByOffer:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        text:
+          type: string
+          example: Текст комментария.
+        createDate:
+          type: string
+          example: 2022-04-11T08:45:40.284Z
+        rating:
+          type: number
+          example: 3
+        userId:
+          type: string
+          example: hfh2hf89hf892h9jf
+
+    avatarPath:
+      type: object
+      properties:
+        avatarPath:
+          type: string
+          example: 'path/to/avatar.jpg'
