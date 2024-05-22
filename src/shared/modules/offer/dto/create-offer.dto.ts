@@ -15,7 +15,7 @@ export class CreateOfferDto {
   public maxAdults: number;
   public price: number;
   public goods: EGoodType[];
-  public numberOfComments: number;
   public userId: string;
+  public numberOfComments: number;
   public location: TLocation;
 }
