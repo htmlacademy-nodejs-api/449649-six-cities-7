@@ -60,7 +60,7 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async incReviewCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findByIdAndUpdate(offerId, {
         '$inc': {
