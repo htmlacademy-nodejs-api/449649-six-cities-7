@@ -6,6 +6,9 @@ import { EComponent } from '../../types/component.enum.js';
 import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
+import { UpdateOfferDto } from './dto/update-offer.dto.js';
+import { SortType } from '../../types/sort-type.enum.js';
+import { DEFAULT_OFFER_COUNT, DEFAULT_OFFER_PREMIUM_COUNT } from './offer.constant.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -21,34 +24,52 @@ export class DefaultOfferService implements OfferService {
     return result;
   }
 
-  public async findOfferById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async findOfferById(offerId: string, count?: number): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findById(offerId)
       .populate('userId')
+      .limit(count ?? DEFAULT_OFFER_COUNT)
       .exec();
   }
 
-  public async findByOfferName(offerName: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel.findOne({ name: offerName }).exec();
+  public async find(): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel
+      .find()
+      .exec();
   }
 
-  public async findOffersByCity(city: string): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.find({ city }).exec();
+  public async findPremiumOffers(): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel
+      .find({ isPremium: true })
+      .sort({ createdAt: SortType.Down })
+      .limit(DEFAULT_OFFER_PREMIUM_COUNT)
+      .populate(['userId'])
+      .exec();
   }
 
-  public async findOffersByUser(userId: string): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.find({ userId }).exec();
+  public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, dto, { new: true })
+      .populate(['userId'])
+      .exec();
   }
 
-  public async findByOfferNameOrCreate(offerName: string, createOfferDto: CreateOfferDto,): Promise<DocumentType<OfferEntity>> {
-    return (await this.findByOfferName(offerName)) || (await this.create(createOfferDto));
+  public async deletebyId(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndDelete(offerId)
+      .exec();
   }
 
-  public async update(offerId: string, dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel.findByIdAndUpdate(offerId, dto, { new: true }).exec();
+  public async incReviewCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, {
+        '$inc': {
+          reviewCount: 1,
+        }
+      }, { new: true }).exec();
   }
 
-  public async delete(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel.findByIdAndDelete(offerId).exec();
+  public async exists(documentId: string): Promise<boolean> {
+    return (await this.offerModel.exists({ _id: documentId })) !== null;
   }
 }
