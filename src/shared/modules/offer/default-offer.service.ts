@@ -32,20 +32,20 @@ export class DefaultOfferService implements OfferService {
       },
       {
         $lookup: {
-          from: 'reviews',
+          from: 'comments',
           localField: '_id',
           foreignField: 'offerId',
-          as: 'reviews',
+          as: 'comments',
         }
       },
       {
         $addFields: {
-          reviewCount: { $size: '$reviews' },
-          rating: { $avg: '$reviews.rating' },
+          reviewCount: { $size: '$comments' },
+          rating: { $avg: '$comments.rating' },
         }
       },
       {
-        $unset: 'reviews'
+        $unset: 'comments'
       }
     ])
       .exec();
@@ -59,19 +59,19 @@ export class DefaultOfferService implements OfferService {
     return this.offerModel.aggregate([
       {
         $lookup: {
-          from: 'reviews',
+          from: 'comments',
           localField: '_id',
           foreignField: 'offerId',
-          as: 'reviews',
+          as: 'comments',
         }
       },
       {
         $addFields: {
-          reviewCount: { $size: '$reviews' },
-          rating: { $avg: '$reviews.rating' },
+          reviewCount: { $size: '$comments' },
+          rating: { $avg: '$comments.rating' },
         }
       },
-      { $unset: ['reviews'] },
+      { $unset: ['comments'] },
       { $sort: { createdAt: SortType.Down } },
       { $limit: DEFAULT_OFFER_COUNT }
     ])
@@ -112,5 +112,61 @@ export class DefaultOfferService implements OfferService {
 
   public async exists(documentId: string): Promise<boolean> {
     return (await this.offerModel.exists({ _id: documentId })) !== null;
+  }
+
+  public async getRating(offerId: string): Promise<number> {
+    const result = await this.offerModel.aggregate([
+      {
+        $match: { _id: new Types.ObjectId(offerId) }
+      },
+      {
+        $lookup: {
+          from: 'comments',
+          let: { offerId: '$_id' },
+          pipeline: [
+            { $match: { offerId: offerId } },
+            { $project: { _id: null, rating: 1 } },
+          ],
+          as: 'comments',
+        }
+      },
+      {
+        $addFields: {
+          numberOfComments: { $size: '$comments' },
+          commentsSum: {
+            $reduce: {
+              input: '$comments',
+              initialValue: 0,
+              in: { $sum: ['$$value', '$$this.rating'] },
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          rating: { $round: [{ $divide: ['$commentsSum', '$numberOfComments'] }, 1] }
+        },
+      },
+      {
+        $unset: ['commentsLength', 'commentsSum', 'comments']
+      }
+    ])
+      .exec();
+
+    return result?.[0]?.rating ?? null;
+  }
+
+  public async updateRating(
+    offerId: string
+  ): Promise<DocumentType<OfferEntity> | null> {
+    const rating = await this.getRating(offerId);
+
+    if (!rating) {
+      return null;
+    }
+
+    return this.offerModel
+      .findByIdAndUpdate(offerId, { $set: { rating: rating } }, { new: true })
+      .exec();
   }
 }

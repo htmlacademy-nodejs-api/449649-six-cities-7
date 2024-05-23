@@ -12,4 +12,6 @@ export interface OfferService {
   deletebyId(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   exists(documentId: string): Promise<boolean>;
+  getRating(offerId: string): Promise<number | null>;
+  updateRating(offerId: string): Promise<DocumentType<OfferEntity> | null>;
 }
