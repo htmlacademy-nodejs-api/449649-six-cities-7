@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { DocumentType, types } from '@typegoose/typegoose';
+import { Types } from 'mongoose';
 
 import { OfferService } from './offer.service.interface.js';
 import { EComponent } from '../../types/component.enum.js';
@@ -24,19 +25,59 @@ export class DefaultOfferService implements OfferService {
     return result;
   }
 
-  public async findOfferById(offerId: string, count?: number): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel
-      .findById(offerId)
-      .populate('userId')
-      .limit(count ?? DEFAULT_OFFER_COUNT)
+  public async findOfferById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    const result = await this.offerModel.aggregate([
+      {
+        $match: { _id: new Types.ObjectId(offerId) }
+      },
+      {
+        $lookup: {
+          from: 'reviews',
+          localField: '_id',
+          foreignField: 'offerId',
+          as: 'reviews',
+        }
+      },
+      {
+        $addFields: {
+          reviewCount: { $size: '$reviews' },
+          rating: { $avg: '$reviews.rating' },
+        }
+      },
+      {
+        $unset: 'reviews'
+      }
+    ])
+      .exec();
+
+
+    return result[0] ?? null;
+  }
+
+
+  public async find(): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel.aggregate([
+      {
+        $lookup: {
+          from: 'reviews',
+          localField: '_id',
+          foreignField: 'offerId',
+          as: 'reviews',
+        }
+      },
+      {
+        $addFields: {
+          reviewCount: { $size: '$reviews' },
+          rating: { $avg: '$reviews.rating' },
+        }
+      },
+      { $unset: ['reviews'] },
+      { $sort: { createdAt: SortType.Down } },
+      { $limit: DEFAULT_OFFER_COUNT }
+    ])
       .exec();
   }
 
-  public async find(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel
-      .find()
-      .exec();
-  }
 
   public async findPremiumOffers(): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
