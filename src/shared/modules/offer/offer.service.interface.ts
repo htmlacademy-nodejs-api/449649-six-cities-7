@@ -5,11 +5,13 @@ import { CreateOfferDto } from './dto/create-offer.dto.js';
 
 export interface OfferService {
   create(createOfferDto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
-  findOfferById(id: string): Promise<DocumentType<OfferEntity> | null>;
-  findByOfferName(offerName: string): Promise<DocumentType<OfferEntity> | null>;
-  findOffersByCity(city: string): Promise<DocumentType<OfferEntity>[]>;
-  findOffersByUser(userId: string): Promise<DocumentType<OfferEntity>[]>;
-  findByOfferNameOrCreate(offerName: string, createOfferDto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
-  update(id: string, createOfferDto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null>;
-  delete(id: string): Promise<DocumentType<OfferEntity> | null>;
+  findOfferById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  find(): Promise<DocumentType<OfferEntity>[]>;
+  findPremiumOffers(): Promise<DocumentType<OfferEntity>[]>;
+  updateById(offerId: string, createOfferDto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null>;
+  deletebyId(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  exists(documentId: string): Promise<boolean>;
+  getRating(offerId: string): Promise<number | null>;
+  updateRating(offerId: string): Promise<DocumentType<OfferEntity> | null>;
 }
