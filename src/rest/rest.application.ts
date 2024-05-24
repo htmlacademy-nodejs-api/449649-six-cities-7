@@ -6,6 +6,7 @@ import { Config, RestSchema } from '../shared/libs/config/index.js';
 import { EComponent } from '../shared/types/index.js';
 import { DatabaseClient } from '../shared/libs/database-client/index.js';
 import { getMongoURI } from '../shared/helpers/database.js';
+import { OfferController } from '../shared/modules/offer/offer.controller.js';
 
 @injectable()
 export class RestApplication {
@@ -14,7 +15,8 @@ export class RestApplication {
   constructor(
     @inject(EComponent.Logger) private readonly logger: Logger,
     @inject(EComponent.Config) private readonly config: Config<RestSchema>,
-    @inject(EComponent.DatabaseClient) private readonly databaseClient: DatabaseClient
+    @inject(EComponent.DatabaseClient) private readonly databaseClient: DatabaseClient,
+    @inject(EComponent.OfferController) private readonly offerController: OfferController
   ) {
     this.server = express();
   }
@@ -31,9 +33,13 @@ export class RestApplication {
     return this.databaseClient.connect(mongoUri);
   }
 
-  private async _initServer() {
+  private async initServer() {
     const port = this.config.get('PORT');
     this.server.listen(port);
+  }
+
+  private async initControllers() {
+    this.server.use('/offers', this.offerController.router);
   }
 
   public async init() {
@@ -44,8 +50,12 @@ export class RestApplication {
     await this.initDb();
     this.logger.info('Init database completed');
 
+    this.logger.info('Init controllers');
+    await this.initControllers();
+    this.logger.info('Controller initialization completed');
+
     this.logger.info('Try to init server…');
-    await this._initServer();
+    await this.initServer();
     this.logger.info(
       `🚀 Server started on http://localhost:${this.config.get('PORT')}`
     );

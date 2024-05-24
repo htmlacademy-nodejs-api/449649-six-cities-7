@@ -8,6 +8,7 @@ export const EComponent = {
   Logger: Symbol.for('Logger'),
   OfferModel: Symbol.for('OfferModel'),
   OfferService: Symbol.for('OfferService'),
+  OfferController: Symbol.for('OfferController'),
   CommentService: Symbol.for('CommentService'),
   CommentModel: Symbol.for('CommentModel'),
   RestApplication: Symbol.for('RestApplication'),
