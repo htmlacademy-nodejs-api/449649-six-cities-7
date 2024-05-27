@@ -7,6 +7,8 @@ import { EComponent } from '../../types/index.js';
 import { OfferService } from './offer.service.interface.js';
 import { fillDTO } from '../../helpers/common.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
+import { CreateOfferDto } from './index.js';
+import { StatusCodes } from 'http-status-codes';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -28,7 +30,24 @@ export class OfferController extends BaseController {
     this.ok(res, responseData);
   }
 
-  public create(_req: Request, _res: Response): void {
-    // Код обработчика
+  public async create(
+    { body }: Request<Record<string, unknown>, Record<string, unknown>, CreateOfferDto>,
+    res: Response
+  ): Promise<void> {
+
+    const existOffer = await this.offerService.findOfferById(body.title);
+
+    if (existOffer) {
+      const existOfferError = new Error(`Offer with tittle «${body.title}» exists.`);
+      this.send(res,
+        StatusCodes.UNPROCESSABLE_ENTITY,
+        { error: existOfferError.message }
+      );
+
+      return this.logger.error(existOfferError.message, existOfferError);
+    }
+
+    const result = await this.offerService.create(body);
+    this.created(res, fillDTO(OfferRdo, result));
   }
 }
