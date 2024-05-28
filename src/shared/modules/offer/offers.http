@@ -1,0 +1,42 @@
+# Предлоджения (Offers)
+## Получить список предложений
+GET http://localhost:4000/offers HTTP/1.1
+Content-Type: application/json
+
+###
+
+## Создать новое предложение
+POST http://localhost:4000/offers HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Appartment in modern style",
+    "description": "Elegant apartment with two bedrooms, a fireplace in the living room, and a view of the park. The area has well-developed infrastructure and convenient transportation access.",
+    "postDate": "2024-05-15T17:27:07.513Z",
+    "city": "Amsterdam",
+    "previewImage": "https://15.design.htmlacademy.pro/static/hotel/.jpg",
+    "images": [
+        "https://15.design.htmlacademy.pro/static/hotel/.jpg",
+        "https://15.design.htmlacademy.pro/static/hotel/.jpg",
+        "https://15.design.htmlacademy.pro/static/hotel/.jpg",
+        "https://15.design.htmlacademy.pro/static/hotel/.jpg"
+    ],
+    "isPremium": true,
+    "rating": null,
+    "type": "room",
+    "bedrooms": 5,
+    "maxAdults": 5,
+    "price": 817,
+    "goods": [
+        "Laptop friendly workspace",
+        "Baby seat",
+        "Washer",
+        "Towels"
+    ],
+    "userId": "605c72c6f4b1f8375c8b4567",  // Убедитесь, что этот ID валиден
+    "numberOfComments": 51,
+    "location": {
+        "latitude": 52.370216,
+        "longitude": 4.895168
+    }
+}
