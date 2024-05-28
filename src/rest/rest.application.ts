@@ -7,7 +7,7 @@ import { EComponent } from '../shared/types/index.js';
 import { DatabaseClient } from '../shared/libs/database-client/index.js';
 import { getMongoURI } from '../shared/helpers/database.js';
 import { OfferController } from '../shared/modules/offer/offer.controller.js';
-import { AppExceptionFilter, ExceptionFilter } from '../shared/libs/rest/index.js';
+import { ExceptionFilter } from '../shared/libs/rest/index.js';
 
 @injectable()
 export class RestApplication {
@@ -48,6 +48,10 @@ export class RestApplication {
     this.server.use(express.json());
   }
 
+  private async _initExceptionFilters() {
+    this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
+  }
+
   public async init() {
     this.logger.info('Application initialization');
     this.logger.info(`Get value from env $PORT: ${this.config.get('PORT')}`);
@@ -63,6 +67,10 @@ export class RestApplication {
     this.logger.info('Init controllers');
     await this.initControllers();
     this.logger.info('Controller initialization completed');
+
+    this.logger.info('Init exception filters');
+    await this._initExceptionFilters();
+    this.logger.info('Exception filters initialization compleated');
 
     this.logger.info('Try to init server…');
     await this.initServer();
