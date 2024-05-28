@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 
-import { BaseController, HttpMethod } from '../../libs/rest/index.js';
+import { BaseController, HttpError, HttpMethod } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { EComponent } from '../../types/index.js';
 import { OfferService } from './offer.service.interface.js';
@@ -38,13 +38,11 @@ export class OfferController extends BaseController {
     const existOffer = await this.offerService.findOfferById(body.title);
 
     if (existOffer) {
-      const existOfferError = new Error(`Offer with tittle «${body.title}» exists.`);
-      this.send(res,
+      throw new HttpError(
         StatusCodes.UNPROCESSABLE_ENTITY,
-        { error: existOfferError.message }
+        `Offer with title «${body.title}» exists.`,
+        'OfferController'
       );
-
-      return this.logger.error(existOfferError.message, existOfferError);
     }
 
     const result = await this.offerService.create(body);
