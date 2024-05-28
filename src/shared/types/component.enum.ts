@@ -13,6 +13,7 @@ export const EComponent = {
   CommentService: Symbol.for('CommentService'),
   CommentModel: Symbol.for('CommentModel'),
   RestApplication: Symbol.for('RestApplication'),
+  UserController: Symbol.for('UserController'),
   UserModel: Symbol.for('UserModel'),
   UserService: Symbol.for('UserService')
 } as const;
