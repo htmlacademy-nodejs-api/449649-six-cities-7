@@ -6,7 +6,6 @@ import { Config, RestSchema } from '../shared/libs/config/index.js';
 import { EComponent } from '../shared/types/index.js';
 import { DatabaseClient } from '../shared/libs/database-client/index.js';
 import { getMongoURI } from '../shared/helpers/database.js';
-import { OfferController } from '../shared/modules/offer/offer.controller.js';
 import { Controller, ExceptionFilter } from '../shared/libs/rest/index.js';
 
 @injectable()
