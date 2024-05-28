@@ -5,10 +5,10 @@ POST http://localhost:4000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
+  "name": "Jack Torrance",
   "email": "torans@overlook.net",
-  "avatarPath": "torrance.png",
-  "firstname": "Jack",
-  "lastname": "Torrance",
+  "avatarPath": "https://15.design.htmlacademy.pro/static/avatar/7.jpg",
+  "type": "Pro",
   "password": "shining"
 }
 
