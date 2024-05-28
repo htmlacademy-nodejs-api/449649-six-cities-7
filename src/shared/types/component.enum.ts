@@ -3,6 +3,7 @@ export const EComponent = {
   CityService: Symbol.for('CityService'),
   Config: Symbol.for('Config'),
   DatabaseClient: Symbol.for('DatabaseClient'),
+  ExceptionFilter: Symbol.for('ExceptionFilter'),
   LocationModel: Symbol.for('LocationModel'),
   LocationService: Symbol.for('LocationService'),
   Logger: Symbol.for('Logger'),

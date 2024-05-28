@@ -7,6 +7,7 @@ import { EComponent } from '../shared/types/index.js';
 import { DatabaseClient } from '../shared/libs/database-client/index.js';
 import { getMongoURI } from '../shared/helpers/database.js';
 import { OfferController } from '../shared/modules/offer/offer.controller.js';
+import { AppExceptionFilter, ExceptionFilter } from '../shared/libs/rest/index.js';
 
 @injectable()
 export class RestApplication {
@@ -16,7 +17,8 @@ export class RestApplication {
     @inject(EComponent.Logger) private readonly logger: Logger,
     @inject(EComponent.Config) private readonly config: Config<RestSchema>,
     @inject(EComponent.DatabaseClient) private readonly databaseClient: DatabaseClient,
-    @inject(EComponent.OfferController) private readonly offerController: OfferController
+    @inject(EComponent.OfferController) private readonly offerController: OfferController,
+    @inject(EComponent.ExceptionFilter) private readonly appExceptionFilter: ExceptionFilter,
   ) {
     this.server = express();
   }
