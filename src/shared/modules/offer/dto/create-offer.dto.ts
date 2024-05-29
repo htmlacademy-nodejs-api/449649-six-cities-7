@@ -19,7 +19,6 @@ export class CreateOfferDto {
   @IsEnum(ECityName, { message: CreateOfferValidationMessage.city.invalidFormat })
   public city: ECityName;
 
-  @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
   public previewImage: string;
 
   @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
