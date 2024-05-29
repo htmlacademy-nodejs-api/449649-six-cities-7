@@ -2,50 +2,52 @@ import { IsArray, IsDateString, IsEnum, IsInt, IsMongoId, Max, MaxLength, Min, M
 
 import { ECityName, EGoodType, EOfferType } from '../../../types/enums.js';
 import { TLocation } from '../../../types/location.type.js';
-import { CreateOfferValidationMessage } from './create-offer.messages.js';
+import { CreateUpdateOfferValidationMessage } from './create-update-offer.messages.js';
 
 export class CreateOfferDto {
-  @MinLength(10, { message: CreateOfferValidationMessage.title.minLength })
-  @MaxLength(100, { message: CreateOfferValidationMessage.title.maxLength })
+  @MinLength(10, { message: CreateUpdateOfferValidationMessage.title.minLength })
+  @MaxLength(100, { message: CreateUpdateOfferValidationMessage.title.maxLength })
   public title: string;
 
-  @MinLength(20, { message: CreateOfferValidationMessage.description.minLength })
-  @MaxLength(1024, { message: CreateOfferValidationMessage.description.maxLength })
+  @MinLength(20, { message: CreateUpdateOfferValidationMessage.description.minLength })
+  @MaxLength(1024, { message: CreateUpdateOfferValidationMessage.description.maxLength })
   public description: string;
 
-  @IsDateString({}, { message: CreateOfferValidationMessage.postDate.invalidFormat })
+  @IsDateString({}, { message: CreateUpdateOfferValidationMessage.postDate.invalidFormat })
   public postDate: Date;
 
-  @IsEnum(ECityName, { message: CreateOfferValidationMessage.city.invalidFormat })
+  @IsEnum(ECityName, { message: CreateUpdateOfferValidationMessage.city.invalidFormat })
   public city: ECityName;
 
   public previewImage: string;
 
-  @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
+  @IsArray({ message: CreateUpdateOfferValidationMessage.images.invalidFormat })
   public images: string[];
 
   public isPremium: boolean;
+
+  @IsInt({ message: CreateUpdateOfferValidationMessage.rating.invalidFormat })
   public rating: number;
 
-  @IsEnum(EOfferType, { message: CreateOfferValidationMessage.type.invalidFormat })
+  @IsEnum(EOfferType, { message: CreateUpdateOfferValidationMessage.type.invalidFormat })
   public type: EOfferType;
 
-  @IsInt({ message: CreateOfferValidationMessage.bedrooms.invalidFormat })
+  @IsInt({ message: CreateUpdateOfferValidationMessage.bedrooms.invalidFormat })
   public bedrooms: number;
 
-  @Min(1, { message: CreateOfferValidationMessage.bedrooms.minValue })
-  @Max(8, { message: CreateOfferValidationMessage.bedrooms.maxValue })
+  @Min(1, { message: CreateUpdateOfferValidationMessage.bedrooms.minValue })
+  @Max(8, { message: CreateUpdateOfferValidationMessage.bedrooms.maxValue })
   public maxAdults: number;
 
-  @IsInt({ message: CreateOfferValidationMessage.price.invalidFormat })
-  @Min(100, { message: CreateOfferValidationMessage.price.minValue })
-  @Max(100000, { message: CreateOfferValidationMessage.price.maxValue })
+  @IsInt({ message: CreateUpdateOfferValidationMessage.price.invalidFormat })
+  @Min(100, { message: CreateUpdateOfferValidationMessage.price.minValue })
+  @Max(100000, { message: CreateUpdateOfferValidationMessage.price.maxValue })
   public price: number;
 
-  @IsArray({ message: CreateOfferValidationMessage.goods.invalidFormat })
+  @IsArray({ message: CreateUpdateOfferValidationMessage.goods.invalidFormat })
   public goods: EGoodType[];
 
-  @IsMongoId({ message: CreateOfferValidationMessage.userId.invalidId})
+  @IsMongoId({ message: CreateUpdateOfferValidationMessage.userId.invalidId})
   public userId: string;
 
   public numberOfComments: number;

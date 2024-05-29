@@ -1,4 +1,4 @@
-export const CreateOfferValidationMessage = {
+export const CreateUpdateOfferValidationMessage = {
   title: {
     minLength: 'Minimum title length must be 10',
     maxLength: 'Maximum title length must be 100',
