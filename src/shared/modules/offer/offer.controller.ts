@@ -11,12 +11,14 @@ import { OfferRdo } from './rdo/offer.rdo.js';
 import { CreateOfferDto } from './index.js';
 import { ParamOfferId } from './type/param-offerid.type.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
+import { CommentRdo, CommentService } from '../comment/index.js';
 
 @injectable()
 export class OfferController extends BaseController {
   constructor(
-    @inject(EComponent.Logger) protected readonly logger: Logger,
-    @inject(EComponent.OfferService) private readonly offerService: OfferService
+    @inject(EComponent.Logger) protected logger: Logger,
+    @inject(EComponent.OfferService) private readonly offerService: OfferService,
+    @inject(EComponent.CommentService) private readonly commentService: CommentService
   ) {
     super(logger);
 
@@ -28,6 +30,7 @@ export class OfferController extends BaseController {
     this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.create });
     this.addRoute({ path: '/:offerId', method: HttpMethod.DELETE, handler: this.delete });
     this.addRoute({ path: '/:offerId', method: HttpMethod.PATCH, handler: this.update });
+    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.GET, handler: this.getComments });
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
@@ -80,7 +83,7 @@ export class OfferController extends BaseController {
         'OfferController'
       );
     }
-
+    await this.commentService.deleteByOfferId(offerId);
     this.noContent(res, offer);
   }
 
@@ -101,5 +104,18 @@ export class OfferController extends BaseController {
   public async getPremiumOffers(_req: Request, res: Response): Promise<void> {
     const offers = await this.offerService.getPremiumOffers();
     this.ok(res, fillDTO(OfferRdo, offers));
+  }
+
+  public async getComments({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    if (!await this.offerService.exists(params.offerId)) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id ${params.offerId} not found.`,
+        'OfferController'
+      );
+    }
+
+    const comments = await this.commentService.findByOfferId(params.offerId);
+    this.ok(res, fillDTO(CommentRdo, comments));
   }
 }

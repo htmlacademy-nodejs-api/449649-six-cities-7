@@ -10,6 +10,7 @@ export const EComponent = {
   OfferModel: Symbol.for('OfferModel'),
   OfferService: Symbol.for('OfferService'),
   OfferController: Symbol.for('OfferController'),
+  CommentController: Symbol.for('CommentController'),
   CommentService: Symbol.for('CommentService'),
   CommentModel: Symbol.for('CommentModel'),
   RestApplication: Symbol.for('RestApplication'),
