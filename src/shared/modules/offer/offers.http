@@ -6,7 +6,7 @@ Content-Type: application/json
 ###
 
 # Получить объявление по идентификатору
-GET http://localhost:4000/offers/664cd997a13e0b2257af6559 HTTP/1.1
+GET http://localhost:4000/offers/664cd997a13e0b2257af655e HTTP/1.1
 
 ###
 
