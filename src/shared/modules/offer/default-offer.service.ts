@@ -79,7 +79,7 @@ export class DefaultOfferService implements OfferService {
   }
 
 
-  public async findPremiumOffers(): Promise<DocumentType<OfferEntity>[]> {
+  public async getPremiumOffers(): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .find({ isPremium: true })
       .sort({ createdAt: SortType.Down })

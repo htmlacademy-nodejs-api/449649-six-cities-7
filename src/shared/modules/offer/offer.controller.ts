@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 
 import { BaseController, HttpError, HttpMethod } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
@@ -8,7 +9,8 @@ import { OfferService } from './offer.service.interface.js';
 import { fillDTO } from '../../helpers/common.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
 import { CreateOfferDto } from './index.js';
-import { StatusCodes } from 'http-status-codes';
+import { ParamOfferId } from './type/param-offerid.type.js';
+import { UpdateOfferDto } from './dto/update-offer.dto.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -21,12 +23,31 @@ export class OfferController extends BaseController {
     this.logger.info('Register routes for OfferController…');
 
     this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.index });
+    this.addRoute({ path: '/:offerId', method: HttpMethod.GET, handler: this.show });
+    this.addRoute({ path: '/premium', method: HttpMethod.GET, handler: this.getPremiumOffers });
     this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.create });
+    this.addRoute({ path: '/:offerId', method: HttpMethod.DELETE, handler: this.delete });
+    this.addRoute({ path: '/:offerId', method: HttpMethod.PATCH, handler: this.update });
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
     const offers = await this.offerService.find();
     this.ok(res, fillDTO(OfferRdo, offers));
+  }
+
+  public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
+    const offer = await this.offerService.findOfferById(offerId);
+
+    if (! offer) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id ${offerId} not found.`,
+        'OfferController'
+      );
+    }
+
+    this.ok(res, offer);
   }
 
   public async create(
@@ -46,5 +67,39 @@ export class OfferController extends BaseController {
 
     const result = await this.offerService.create(body);
     this.created(res, fillDTO(OfferRdo, result));
+  }
+
+  public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
+    const offer = await this.offerService.deletebyId(offerId);
+
+    if (!offer) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id ${offerId} not found.`,
+        'OfferController'
+      );
+    }
+
+    this.noContent(res, offer);
+  }
+
+  public async update({ body, params }: Request<ParamOfferId, unknown, UpdateOfferDto>, res: Response): Promise<void> {
+    const updatedOffer = await this.offerService.updateById(params.offerId, body);
+
+    if (!updatedOffer) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id ${params.offerId} not found.`,
+        'OfferController'
+      );
+    }
+
+    this.ok(res, fillDTO(OfferRdo, updatedOffer));
+  }
+
+  public async getPremiumOffers(_req: Request, res: Response): Promise<void> {
+    const offers = await this.offerService.getPremiumOffers();
+    this.ok(res, fillDTO(OfferRdo, offers));
   }
 }
