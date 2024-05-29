@@ -10,7 +10,7 @@ import { SortType } from '../../types/sort-type.enum.js';
 
 
 @injectable()
-export class DefaultCommentService implements ICommentService {
+export class CommentService implements ICommentService {
   constructor(
     @inject(EComponent.CommentModel)
     private readonly commentModel: types.ModelType<CommentEntity>,
