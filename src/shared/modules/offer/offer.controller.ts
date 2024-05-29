@@ -29,7 +29,14 @@ export class OfferController extends BaseController {
     this.addRoute({ path: '/premium', method: HttpMethod.GET, handler: this.getPremiumOffers });
     this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]});
     this.addRoute({ path: '/:offerId', method: HttpMethod.DELETE, handler: this.delete, middlewares: [new ValidateObjectIdMiddleware('offerId')]});
-    this.addRoute({ path: '/:offerId', method: HttpMethod.PATCH, handler: this.update, middlewares: [new ValidateObjectIdMiddleware('offerId')]});
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.PATCH,
+      handler: this.update,
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new ValidateDtoMiddleware(UpdateOfferDto)
+      ]});
     this.addRoute({ path: '/:offerId/comments', method: HttpMethod.GET, handler: this.getComments, middlewares: [new ValidateObjectIdMiddleware('offerId')]});
   }
 
