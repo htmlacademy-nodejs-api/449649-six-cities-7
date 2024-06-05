@@ -47,7 +47,6 @@ export class CreateOfferDto {
   @IsArray({ message: CreateUpdateOfferValidationMessage.goods.invalidFormat })
   public goods: EGoodType[];
 
-  @IsMongoId({ message: CreateUpdateOfferValidationMessage.userId.invalidId})
   public userId: string;
 
   public numberOfComments: number;
