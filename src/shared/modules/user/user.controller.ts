@@ -13,6 +13,8 @@ import { LoginUserRequest } from './login-user-request.type.js';
 import { fillDTO } from '../../helpers/common.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import { CreateUserDto } from './index.js';
+import { AuthService } from '../auth/index.js';
+import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -20,6 +22,7 @@ export class UserController extends BaseController {
     @inject(EComponent.Logger) protected readonly logger: Logger,
     @inject(EComponent.UserService) private readonly userService: UserService,
     @inject(EComponent.Config) private readonly configService: Config<RestSchema>,
+    @inject(EComponent.AuthService) private readonly authService: AuthService
   ) {
     super(logger);
     this.logger.info('Register routes for UserController…');
@@ -67,23 +70,15 @@ export class UserController extends BaseController {
 
   public async login(
     { body }: LoginUserRequest,
-    _res: Response,
+    res: Response,
   ): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
-
-    if (!existsUser) {
-      throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        `User with email ${body.email} not found.`,
-        'UserController',
-      );
-    }
-
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController',
-    );
+    const user = await this.authService.verify(body);
+    const token = await this.authService.authenticate(user);
+    const responseData = fillDTO(LoggedUserRdo, {
+      email: user.email,
+      token,
+    });
+    this.ok(res, responseData);
   }
 
   public async uploadAvatar(req: Request, res: Response) {
