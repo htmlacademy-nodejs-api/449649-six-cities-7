@@ -1,4 +1,4 @@
-import { IsArray, IsDateString, IsEnum, IsInt, IsMongoId, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { IsArray, IsDateString, IsEnum, IsInt, Max, MaxLength, Min, MinLength } from 'class-validator';
 
 import { ECityName, EGoodType, EOfferType } from '../../../types/enums.js';
 import { TLocation } from '../../../types/location.type.js';
