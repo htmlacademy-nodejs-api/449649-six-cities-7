@@ -1,7 +1,14 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 
-import { BaseController, DocumentExistsMiddleware, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import {
+  BaseController,
+  DocumentExistsMiddleware,
+  HttpMethod,
+  ValidateDtoMiddleware,
+  ValidateObjectIdMiddleware,
+  PrivateRouteMiddleware
+} from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { EComponent } from '../../types/index.js';
 import { OfferService } from './offer.service.interface.js';
@@ -29,6 +36,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.GET,
       handler: this.show,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]});
@@ -39,6 +47,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.DELETE,
       handler: this.delete,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]});
@@ -47,6 +56,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.PATCH,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto)
       ]});
@@ -55,6 +65,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.GET,
       handler: this.getComments,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]});
