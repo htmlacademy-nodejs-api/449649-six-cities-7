@@ -1,4 +1,6 @@
 export const EComponent = {
+  AuthService: Symbol.for('AuthService'),
+  AuthExceptionFilter: Symbol.for('AuthExceptionFilter'),
   CityModel: Symbol.for('CityModel'),
   CityService: Symbol.for('CityService'),
   Config: Symbol.for('Config'),
