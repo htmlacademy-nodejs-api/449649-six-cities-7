@@ -5,7 +5,7 @@ import { EUserType } from '../../types/enums.js';
 import { createSHA256 } from '../../helpers/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
-export interface UserEntity extends defaultClasses.Base {}
+export interface UserEntity extends defaultClasses.Base { }
 
 @modelOptions({
   schemaOptions: {
@@ -16,19 +16,19 @@ export interface UserEntity extends defaultClasses.Base {}
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class UserEntity extends defaultClasses.TimeStamps implements IUser {
-  @prop({required: true, trim: true, default: ''})
+  @prop({ required: true, trim: true, default: '' })
   public name: string;
 
-  @prop({required: true, trim: true, unique: true})
+  @prop({ required: true, trim: true, unique: true })
   public email: string;
 
-  @prop({required: false, trim: true, default: 'https://15.design.htmlacademy.pro/static/avatar/8.jpg'})
+  @prop({ required: false, trim: true, default: 'https://15.design.htmlacademy.pro/static/avatar/8.jpg' })
   public avatarPath: string;
 
-  @prop({ required: true, type: () => String, enum: EUserType})
+  @prop({ required: true, type: () => String, enum: EUserType })
   public type: EUserType;
 
-  @prop({required: true, trim: true})
+  @prop({ required: true, trim: true })
   private password?: string;
 
   constructor(userData: IUser) {
@@ -49,8 +49,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements IUser {
   }
 
   public verifyPassword(password: string, salt: string) {
-    const hashPassword = createSHA256(password, salt);
-    return hashPassword === this.password;
+    return createSHA256(password, salt) === this.password;
   }
 }
 
