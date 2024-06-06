@@ -39,4 +39,10 @@ Content-Type: image/png
 < /Users/dyurkin/Downloads/240505_141.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
-##
+###
+
+## Проверить токен пользователя
+GET http://localhost:4000/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJmaXJzdG5hbWUiOiJKYWNrIFRvcnJhbmNlIiwiaWQiOiI2NjU1YzhlM2IxYWQwY2M2NDk2NGE2YWIiLCJpYXQiOjE3MTc1ODQ3NTUsImV4cCI6MTcxNzc1NzU1NX0.vxe4BOQ9MOdzT_qSgYGKFGolg5M_rf4rKVa4YRTAdcs
+
+###
