@@ -1,52 +1,54 @@
-export const CreateUpdateOfferValidationMessage = {
-  title: {
-    minLength: 'Minimum title length must be 10',
-    maxLength: 'Maximum title length must be 100',
+import { MAX_BEDROOMS, MAX_RATING, MAX_TITLE_LENGTH, MIN_BEDROOMS, MIN_IMAGES_LENGTH, MIN_RATING, MIN_TITLE_LENGTH } from '../offer.constant.js';
+
+export const CREATE_UPDATE_OFFER_VALIDATION_MESSAGE = {
+  TITLE: {
+    MIN_LENGTH: `Minimum title length must be ${MIN_TITLE_LENGTH}`,
+    MAX_LENGTH: `Maximum title length must be ${MAX_TITLE_LENGTH}`,
   },
-  description: {
-    minLength: 'Minimum description length must be 20',
-    maxLength: 'Maximum description length must be 1024',
+  DESCRIPTION: {
+    MIN_LENGTH: `Minimum description length must be ${MIN_TITLE_LENGTH}`,
+    MAX_LENGTH: `Maximum description length must be ${MAX_TITLE_LENGTH}`,
   },
-  postDate: {
-    invalidFormat: 'postDate must be a valid ISO date',
+  POST_DATE: {
+    INVALID_FORMAT: 'postDate must be a valid ISO date',
   },
-  city: {
-    invalidFormat: 'City must be one of the following: Paris, Cologne, Brussels, Amsterdam, Hamburg, Dusseldorf',
+  CITY: {
+    INVALID_FORMAT: 'City must be one of the following: Paris, Cologne, Brussels, Amsterdam, Hamburg, Dusseldorf',
   },
-  images: {
-    invalidFormat: 'Field images must be an array',
-    minLength: 'Minimum images length must be 6',
+  IMAGES: {
+    INVALID_FORMAT: 'Field images must be an array',
+    MIN_LENGTH: `Minimum images length must be ${MIN_IMAGES_LENGTH}`,
   },
-  isPremium: {
-    invalidFormat: 'isPremium must be a boolean',
+  IS_PREMIUM: {
+    INVALID_FORMAT: 'isPremium must be a boolean',
   },
-  rating: {
-    invalidFormat: 'Rating must be an integer',
-    minValue: 'Minimum rating is 1',
-    maxValue: 'Maximum rating is 5',
+  RATING: {
+    INVALID_FORMAT: 'Rating must be an integer',
+    MIN_VALUE: `Minimum rating is ${MIN_RATING}`,
+    MAX_VALUE: `Maximum rating is ${MAX_RATING}`,
   },
-  type: {
-    invalidFormat: 'Type must be one of the following: apartment, room, house or hotel',
+  TYPE: {
+    INVALID_FORMAT: 'Type must be one of the following: apartment, room, house or hotel',
   },
-  bedrooms: {
-    invalidFormat: 'Bedrooms must be an integer',
-    minValue: 'Minimum bedrooms is 1',
-    maxValue: 'Maximum bedrooms is 8',
+  BEDROOMS: {
+    INVALID_FORMAT: 'Bedrooms must be an integer',
+    MIN_VALUE: `Minimum bedrooms is ${MIN_BEDROOMS}`,
+    MAX_VALUE: `Maximum bedrooms is ${MAX_BEDROOMS}`,
   },
-  maxAdults: {
-    invalidFormat: 'Max adults must be an integer',
-    minValue: 'Minimum max adults is 1',
-    maxValue: 'Maximum max adults is 10',
+  MAX_ADULTS: {
+    INVALID_FORMAT: 'Max adults must be an integer',
+    MIN_VALUE: `Minimum max adults is ${MIN_BEDROOMS}`,
+    MAX_VALUE: `Maximum max adults is ${MAX_BEDROOMS}`,
   },
-  price: {
-    invalidFormat: 'Price must be an integer',
-    minValue: 'Minimum price is 100',
-    maxValue: 'Maximum price is 100000',
+  PRICE: {
+    INVALID_FORMAT: 'Price must be an integer',
+    MIN_VALUE: `Minimum price is ${MIN_BEDROOMS}`,
+    MAX_VALUE: `Maximum price is ${MAX_BEDROOMS}`,
   },
-  goods: {
-    invalidFormat: 'Goods must be one of the following: Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge',
+  GOODS: {
+    INVALID_FORMAT: 'Goods must be one of the following: Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge',
   },
-  userId: {
-    invalidId: 'UserId field must be an array of valid id',
-  },
+  USER_ID: {
+    INVALID_ID: 'UserId field must be an array of valid id',
+  }
 } as const;

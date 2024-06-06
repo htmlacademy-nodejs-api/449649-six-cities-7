@@ -1,2 +1,15 @@
 export const DEFAULT_OFFER_PREMIUM_COUNT = 3;
 export const DEFAULT_OFFER_COUNT = 25;
+export const MIN_TITLE_LENGTH = 10;
+export const MAX_TITLE_LENGTH = 100;
+export const MIN_DESCRIPTION_LENGTH = 20;
+export const MAX_DESCRIPTION_LENGTH = 1024;
+export const MIN_IMAGES_LENGTH = 6;
+export const MIN_RATING = 1;
+export const MAX_RATING = 5;
+export const MIN_BEDROOMS = 1;
+export const MAX_BEDROOMS = 8;
+export const MIN_MAX_ADULTS = 1;
+export const MAX_MAX_ADULTS = 10;
+export const MIN_PRICE = 100;
+export const MAX_PRICE = 100000;

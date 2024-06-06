@@ -31,12 +31,12 @@ export class ParseTokenMiddleware implements Middleware {
     try {
       const { payload } = await jwtVerify(token, createSecretKey(this.jwtSecret, 'utf-8'));
 
-      if (isTokenPayload(payload)) {
-        req.tokenPayload = { ...payload };
-        return next();
-      } else {
+      if (!isTokenPayload(payload)) {
         throw new Error('Bad token');
       }
+
+      req.tokenPayload = { ...payload };
+      return next();
     } catch {
 
       return next(new HttpError(

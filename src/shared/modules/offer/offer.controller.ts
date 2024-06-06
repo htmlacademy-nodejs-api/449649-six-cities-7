@@ -39,9 +39,10 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
-      ]});
+      ]
+    });
     this.addRoute({ path: '/premium', method: HttpMethod.GET, handler: this.getPremiumOffers });
-    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)]});
+    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)] });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.DELETE,
@@ -50,7 +51,8 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
-      ]});
+      ]
+    });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.PATCH,
@@ -59,7 +61,8 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto)
-      ]});
+      ]
+    });
     this.addRoute({
       path: '/:offerId/comments',
       method: HttpMethod.GET,
@@ -68,7 +71,8 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
-      ]});
+      ]
+    });
   }
 
   public async index(_req: Request, res: Response): Promise<void> {
@@ -90,8 +94,7 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(OfferRdo, result));
   }
 
-  public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    const { offerId } = params;
+  public async delete({ params: { offerId } }: Request<ParamOfferId>, res: Response): Promise<void> {
     const offer = await this.offerService.deletebyId(offerId);
     await this.commentService.deleteByOfferId(offerId);
     this.noContent(res, offer);
