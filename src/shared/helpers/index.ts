@@ -4,7 +4,8 @@ export {
   getRandomItem,
   getErrorMessage,
   fillDTO,
-  createErrorObject
+  createErrorObject,
+  reduceValidationErrors
 } from './common.js';
 
 export { getCurrentModuleDirectoryPath } from './file-system.js';
