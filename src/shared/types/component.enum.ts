@@ -16,6 +16,7 @@ export const EComponent = {
   OfferModel: Symbol.for('OfferModel'),
   OfferService: Symbol.for('OfferService'),
   OfferController: Symbol.for('OfferController'),
+  PathTransformer: Symbol.for('PathTransformer'),
   RestApplication: Symbol.for('RestApplication'),
   ValidationExceptionFilter: Symbol.for('ValidationExceptionFilter'),
   UserController: Symbol.for('UserController'),
