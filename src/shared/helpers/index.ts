@@ -5,7 +5,8 @@ export {
   getErrorMessage,
   fillDTO,
   createErrorObject,
-  reduceValidationErrors
+  reduceValidationErrors,
+  getFullServerPath
 } from './common.js';
 
 export { getCurrentModuleDirectoryPath } from './file-system.js';
