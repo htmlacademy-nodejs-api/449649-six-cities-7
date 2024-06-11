@@ -5,10 +5,10 @@ POST http://localhost:4000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Jack Torrance",
-  "email": "torans@overlook.net",
+  "name": "Cristiano Ronaldo",
+  "email": "criro@portugal.por",
   "type": "Pro",
-  "password": "shining"
+  "password": "seeeee"
 }
 
 ###
@@ -20,8 +20,8 @@ POST http://localhost:4000/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "torans@overlook.net",
-  "password": "shining"
+  "email": "criro@portugal.por",
+  "password": "seeeee"
 }
 
 ###
@@ -42,6 +42,6 @@ Content-Type: image/png
 
 ## Проверить токен пользователя
 GET http://localhost:4000/users/login HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJmaXJzdG5hbWUiOiJKYWNrIFRvcnJhbmNlIiwiaWQiOiI2NjU1YzhlM2IxYWQwY2M2NDk2NGE2YWIiLCJpYXQiOjE3MTc1ODQ3NTUsImV4cCI6MTcxNzc1NzU1NX0.vxe4BOQ9MOdzT_qSgYGKFGolg5M_rf4rKVa4YRTAdcs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4MDk1OTMyLCJleHAiOjE3MTgyNjg3MzJ9.sJcH_YtIgazQIM9REVeVmruzqDE_dREteoTFwXE2EFQ
 
 ###

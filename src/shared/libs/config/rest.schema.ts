@@ -76,12 +76,12 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'Host where started service',
     format: String,
     env: 'HOST',
-    default: 'localhost'
+    default: null
   },
   STATIC_DIRECTORY_PATH: {
     doc: 'Path to directory with static resources',
     format: String,
     env: 'STATIC_DIRECTORY_PATH',
-    default: 'static'
+    default: null
   },
 });

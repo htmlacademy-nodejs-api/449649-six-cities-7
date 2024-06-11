@@ -3,6 +3,7 @@ import { defaultClasses, getModelForClass, prop, modelOptions } from '@typegoose
 import { IUser } from '../../types/index.js';
 import { EUserType } from '../../types/enums.js';
 import { createSHA256 } from '../../helpers/index.js';
+import { DEFAULT_AVATAR_FILE_NAME } from './user.constant.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface UserEntity extends defaultClasses.Base { }
@@ -22,7 +23,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements IUser {
   @prop({ required: true, trim: true, unique: true })
   public email: string;
 
-  @prop({ required: false, trim: true, default: 'https://15.design.htmlacademy.pro/static/avatar/8.jpg' })
+  @prop({ required: false, trim: true, default: DEFAULT_AVATAR_FILE_NAME })
   public avatarPath: string;
 
   @prop({ required: true, type: () => String, enum: EUserType })

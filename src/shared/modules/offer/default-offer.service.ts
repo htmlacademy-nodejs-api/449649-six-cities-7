@@ -11,6 +11,26 @@ import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { SortType } from '../../types/sort-type.enum.js';
 import { DEFAULT_OFFER_COUNT, DEFAULT_OFFER_PREMIUM_COUNT } from './offer.constant.js';
 
+const addReviewsToOffer = [
+  {
+    $lookup: {
+      from: 'reviews',
+      localField: '_id',
+      foreignField: 'offerId',
+      as: 'reviews',
+    }
+  },
+  {
+    $addFields: {
+      reviewCount: { $size: '$reviews' },
+      rating: { $avg: '$reviews.rating' },
+    }
+  },
+  {
+    $unset: 'reviews'
+  }
+];
+
 @injectable()
 export class DefaultOfferService implements OfferService {
   constructor(
@@ -54,7 +74,6 @@ export class DefaultOfferService implements OfferService {
     return result[0] ?? null;
   }
 
-
   public async find(): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel.aggregate([
       {
@@ -78,13 +97,27 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
+  public async getPremiumByCity(cityName: string): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel.aggregate([
+      {
+        $match: {
+          'city.name': cityName,
+          isPremium: true
+        }
+      },
+      ...addReviewsToOffer,
+      { $sort: { createdAt: SortType.Down } },
+      { $limit: DEFAULT_OFFER_PREMIUM_COUNT },
+    ])
+      .exec();
+  }
 
-  public async getPremiumOffers(): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel
-      .find({ isPremium: true })
-      .sort({ createdAt: SortType.Down })
-      .limit(DEFAULT_OFFER_PREMIUM_COUNT)
-      .populate(['userId'])
+  public async getFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel.aggregate([
+      { $match: { $expr: { $in: [new Types.ObjectId(userId), '$favorites'] } } },
+      { $set: { isFavorite: { $in: [new Types.ObjectId(userId), '$favorites'] } } },
+      { $sort: { createdAt: SortType.Down } },
+    ])
       .exec();
   }
 

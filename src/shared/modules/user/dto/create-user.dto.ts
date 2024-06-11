@@ -1,21 +1,21 @@
 import { IsEmail, IsEnum, IsString, MaxLength, MinLength } from 'class-validator';
 
-import { CreateUserMessages } from './create-user.messages.js';
+import { CREATE_USER_MESSAGES } from './create-user.messages.js';
 import { EUserType } from '../../../types/enums.js';
 
 export class CreateUserDto {
-  @IsString({ message: CreateUserMessages.name.required })
+  @IsString({ message: CREATE_USER_MESSAGES.NAME.REQUIRED })
   public name: string;
 
-  @IsEmail({}, { message: CreateUserMessages.email.invalidFormat })
+  @IsEmail({}, { message: CREATE_USER_MESSAGES.EMAIL.INVALID_FORMAT })
   public email: string;
 
-  @IsString({ message: CreateUserMessages.type.required })
-  @IsEnum(EUserType, { message: CreateUserMessages.type.invalidFormat })
+  @IsString({ message: CREATE_USER_MESSAGES.TYPE.REQUIRED })
+  @IsEnum(EUserType, { message: CREATE_USER_MESSAGES.TYPE.INVALID_FORMAT })
   public type: EUserType;
 
-  @IsString({ message: CreateUserMessages.password.required })
-  @MinLength(6, { message: CreateUserMessages.password.minLength })
-  @MaxLength(12, { message: CreateUserMessages.password.maxLength })
+  @IsString({ message: CREATE_USER_MESSAGES.PASSWORD.REQUIRED })
+  @MinLength(6, { message: CREATE_USER_MESSAGES.PASSWORD.MIN_LENGTH })
+  @MaxLength(12, { message: CREATE_USER_MESSAGES.PASSWORD.MAX_LENGTH })
   public password: string;
 }

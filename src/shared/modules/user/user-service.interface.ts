@@ -7,6 +7,7 @@ import { UpdateUserDto } from './dto/update-user.dto.js';
 export interface UserService {
   create(dto: CreateUserDto, salt: string,): Promise<DocumentType<Omit<UserEntity, 'password'>>>;
   findByEmail(email: string): Promise<DocumentType<UserEntity> | null>;
+  findById(userId: string): Promise<DocumentType<UserEntity> | null>;
   findOrCreate(dto: CreateUserDto, salt: string,): Promise<DocumentType<Omit<UserEntity, 'password'>>>;
   updateById(userId: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null>;
 }

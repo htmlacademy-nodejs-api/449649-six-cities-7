@@ -28,13 +28,12 @@ export class CommentService implements ICommentService {
     return comment.populate('userId');
   }
 
-  public async findByOfferId(
-    offerId: string
-  ): Promise<DocumentType<CommentEntity>[]> {
+  public async findByOfferId(offerId: string, count?: number): Promise<DocumentType<CommentEntity>[]> {
+    const limit = count ?? DEFAULT_COMMENT_COUNT;
     return this.commentModel
       .find({ offerId })
-      .limit(DEFAULT_COMMENT_COUNT)
       .sort({ createdAt: SortType.Down })
+      .limit(limit)
       .populate('userId');
   }
 

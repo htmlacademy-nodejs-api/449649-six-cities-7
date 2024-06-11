@@ -7,8 +7,8 @@ import { STATIC_FILES_ROUTE, STATIC_UPLOAD_ROUTE } from '../../../../rest/index.
 import { getFullServerPath } from '../../../helpers/index.js';
 import { Config, RestSchema } from '../../config/index.js';
 
-function isObject(value: unknown): value is Record<string, object> {
-  return typeof value === 'object' && value !== null;
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 @injectable()
