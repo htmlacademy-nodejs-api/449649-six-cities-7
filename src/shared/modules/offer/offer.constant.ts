@@ -1,5 +1,5 @@
 export const DEFAULT_OFFER_PREMIUM_COUNT = 3;
-export const DEFAULT_OFFER_COUNT = 25;
+export const DEFAULT_OFFER_COUNT = 60;
 export const MIN_TITLE_LENGTH = 10;
 export const MAX_TITLE_LENGTH = 100;
 export const MIN_DESCRIPTION_LENGTH = 20;
