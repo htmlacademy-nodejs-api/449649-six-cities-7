@@ -6,16 +6,19 @@ Content-Type: application/json
 ###
 
 # Получить объявление по идентификатору
-GET http://localhost:4000/offers/664cd997a13e0b2257af655e HTTP/1.1
+GET http://localhost:4000/offers/666956c5135d3bb2b9c91f79 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4MDk1OTMyLCJleHAiOjE3MTgyNjg3MzJ9.sJcH_YtIgazQIM9REVeVmruzqDE_dREteoTFwXE2EFQ
 
 ###
 
 ## Создать новое предложение
 POST http://localhost:4000/offers HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4MDk1OTMyLCJleHAiOjE3MTgyNjg3MzJ9.sJcH_YtIgazQIM9REVeVmruzqDE_dREteoTFwXE2EFQ
 
 {
-    "title": "Appartment in modern style",
+    "title": "Appartment in modern style 2",
     "description": "Elegant apartment with two bedrooms, a fireplace in the living room, and a view of the park. The area has well-developed infrastructure and convenient transportation access.",
     "postDate": "2024-05-15T17:27:07.513Z",
     "city": "Amsterdam",
@@ -27,11 +30,11 @@ Content-Type: application/json
         "https://15.design.htmlacademy.pro/static/hotel/.jpg"
     ],
     "isPremium": true,
-    "rating": null,
+    "rating": 4,
     "type": "room",
-    "bedrooms": 5,
+    "bedrooms": 4,
     "maxAdults": 5,
-    "price": 817,
+    "price": 800,
     "goods": [
         "Laptop friendly workspace",
         "Baby seat",
@@ -50,33 +53,54 @@ Content-Type: application/json
 
 ## Удалить объявление по идентификатору
 
-DELETE http://localhost:4000/offers/664cd997a13e0b2257af6559 HTTP/1.1
+DELETE http://localhost:4000/offers/666956c5135d3bb2b9c91f79 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4MDk1OTMyLCJleHAiOjE3MTgyNjg3MzJ9.sJcH_YtIgazQIM9REVeVmruzqDE_dREteoTFwXE2EFQ
 
 ###
 
 ## Обновить объявление
 
-PATCH http://localhost:4000/offers/664cd997a13e0b2257af6563 HTTP/1.1
+PATCH http://localhost:4000/offers/666956c5135d3bb2b9c91f79 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4MDk1OTMyLCJleHAiOjE3MTgyNjg3MzJ9.sJcH_YtIgazQIM9REVeVmruzqDE_dREteoTFwXE2EFQ
 
 {
-  "title": "Appartment in modern style CHANGED",
-  "description": "Description CHANGED",
+  "title": "Appartment in modern style 2 CHANGED",
+  "description": "Description wioeunvwipeunvwienvwiev CHANGED",
   "price": 1000
 }
 
 ###
 
+## Изменить состояние флага isFavorite
+PUT http://localhost:4000/offers/664cd997a13e0b2257af655e/favorites/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4MDk1OTMyLCJleHAiOjE3MTgyNjg3MzJ9.sJcH_YtIgazQIM9REVeVmruzqDE_dREteoTFwXE2EFQ
+
+{
+  "isFavorite": "false"
+}
+
+###
+
+## Получить список избранных предложений для пользователя
+GET http://localhost:5000/offers/favorites HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4MDk1OTMyLCJleHAiOjE3MTgyNjg3MzJ9.sJcH_YtIgazQIM9REVeVmruzqDE_dREteoTFwXE2EFQ
+
+###
+
 ## Получить список премиум-предложений
 
-GET http://localhost:4000/offers/premium HTTP/1.1
+GET http://localhost:4000/offers/premium/Paris HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4MDk1OTMyLCJleHAiOjE3MTgyNjg3MzJ9.sJcH_YtIgazQIM9REVeVmruzqDE_dREteoTFwXE2EFQ
 
 ###
 
 ## Получить список избранных предложений для пользователя
-GET http://localhost:4000/offers/favorites HTTP/1.1
+GET http://localhost:4000/offers/666956c5135d3bb2b9c91f79/favorites HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4MDk1OTMyLCJleHAiOjE3MTgyNjg3MzJ9.sJcH_YtIgazQIM9REVeVmruzqDE_dREteoTFwXE2EFQ
 
@@ -93,7 +117,5 @@ Content-Type: image/png
 
 < /Users/spider_net/Downloads/240601_214.jpg
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
-
-###
 
 ###

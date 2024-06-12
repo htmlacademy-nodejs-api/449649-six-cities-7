@@ -59,7 +59,8 @@ export class UserController extends BaseController {
       method: HttpMethod.GET,
       handler: this.indexId,
       middlewares: [
-        new ValidateObjectIdMiddleware('userId')]});
+        new ValidateObjectIdMiddleware('userId')
+      ]});
   }
 
   public async create(

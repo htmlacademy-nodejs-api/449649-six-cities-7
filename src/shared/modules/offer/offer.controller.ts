@@ -8,7 +8,8 @@ import {
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware,
   PrivateRouteMiddleware,
-  UploadFileMiddleware
+  UploadFileMiddleware,
+  RequestBody
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { EComponent } from '../../types/index.js';
@@ -45,7 +46,7 @@ export class OfferController extends BaseController {
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
-    this.addRoute({ path: '/premium', method: HttpMethod.GET, handler: this.showPremiumOffersByCity });
+    this.addRoute({ path: '/premium/:city', method: HttpMethod.GET, handler: this.showPremiumOffersByCity });
     this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)] });
     this.addRoute({
       path: '/:offerId',
@@ -74,8 +75,26 @@ export class OfferController extends BaseController {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'image'),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'previewImage'),
       ]
+    });
+    this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.GET,
+      handler: this.showFavoritesOffers,
+      middlewares: [
+        new PrivateRouteMiddleware()
+      ]
+    });
+    this.addRoute({
+      path: '/:offerId/favorites',
+      method: HttpMethod.PUT,
+      handler: this.updateFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ],
     });
   }
 
@@ -84,8 +103,7 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    const { offerId } = params;
+  public async show({ params: { offerId } }: Request<ParamOfferId>, res: Response): Promise<void> {
     const offer = await this.offerService.findOfferById(offerId);
     this.ok(res, offer);
   }
@@ -114,14 +132,29 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  public async showFavoritesOffers({tokenPayload: { id }}: Request, res: Response): Promise<void> {
+  public async showFavoritesOffers({ tokenPayload: { id } }: Request, res: Response): Promise<void> {
     const offers = await this.offerService.getFavorites(id);
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  public async uploadImage({ params: { offerId }, file } : Request<ParamOfferId>, res: Response) {
+  public async uploadImage({ params: { offerId }, file }: Request<ParamOfferId>, res: Response) {
     const updateDto = { previewImage: file?.filename };
     await this.offerService.updateById(offerId, updateDto);
     this.created(res, fillDTO(UploadImageRdo, updateDto));
+  }
+
+  public async updateFavorite(
+    { params: { offerId }, body }: Request<ParamOfferId, RequestBody, { isFavorite: string }>,
+    res: Response,
+  ): Promise<void> {
+    const isFavorite = body.isFavorite === 'true';
+
+    const result = isFavorite
+      ? await this.offerService.addToFavorite(offerId)
+      : await this.offerService.deleteFromFavorite(offerId);
+
+    this.ok(res, {
+      isFavorite: result,
+    });
   }
 }

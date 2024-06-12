@@ -10,7 +10,6 @@ import {
   PrivateRouteMiddleware,
   RequestQuery,
   ValidateObjectIdMiddleware,
-  DocumentExistsMiddleware,
 } from '../../libs/rest/index.js';
 import { EComponent } from '../../types/component.enum.js';
 import { Logger } from '../../libs/logger/index.js';
@@ -45,8 +44,8 @@ export default class CommentController extends BaseController {
       method: HttpMethod.GET,
       handler: this.findByOfferId,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'id'),
       ]
     });
   }

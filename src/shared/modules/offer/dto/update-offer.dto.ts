@@ -34,6 +34,9 @@ export class UpdateOfferDto {
   public isPremium?: boolean;
 
   @IsOptional()
+  public isFavorite?: boolean;
+
+  @IsOptional()
   @IsInt({ message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.RATING.INVALID_FORMAT })
   public rating?: number;
 

@@ -108,8 +108,7 @@ export class DefaultOfferService implements OfferService {
       ...addReviewsToOffer,
       { $sort: { createdAt: SortType.Down } },
       { $limit: DEFAULT_OFFER_PREMIUM_COUNT },
-    ])
-      .exec();
+    ]).exec();
   }
 
   public async getFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {
@@ -119,6 +118,14 @@ export class DefaultOfferService implements OfferService {
       { $sort: { createdAt: SortType.Down } },
     ])
       .exec();
+  }
+
+  public async addToFavorite(id: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel.findByIdAndUpdate(id, {isFavorite: true}, {new: true}).exec();
+  }
+
+  public async deleteFromFavorite(id: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel.findByIdAndUpdate(id, {isFavorite: false}, {new: true}).exec();
   }
 
   public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {

@@ -45,6 +45,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       previewImage,
       images: this.parseListString(images),
       isPremium: !!isPremium,
+      isFavorite: false,
       rating: parseFloat(rating),
       type: type as EOfferType,
       bedrooms: parseInt(bedrooms, 10),
