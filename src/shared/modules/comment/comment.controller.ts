@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import {
@@ -8,6 +8,8 @@ import {
   HttpMethod,
   ValidateDtoMiddleware,
   PrivateRouteMiddleware,
+  RequestQuery,
+  ValidateObjectIdMiddleware,
 } from '../../libs/rest/index.js';
 import { EComponent } from '../../types/component.enum.js';
 import { Logger } from '../../libs/logger/index.js';
@@ -17,6 +19,7 @@ import { fillDTO } from '../../helpers/common.js';
 import { CommentRdo } from './rdo/comment.rdo.js';
 import { CreateCommentRequest } from './types/create-comment-request.type.js';
 import { CreateCommentDto } from './index.js';
+import { ParamOfferId } from '../offer/type/param-offerid.type.js';
 
 @injectable()
 export default class CommentController extends BaseController {
@@ -36,6 +39,15 @@ export default class CommentController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateCommentDto)]
     });
+    this.addRoute({
+      path: '/:offerId',
+      method: HttpMethod.GET,
+      handler: this.findByOfferId,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+      ]
+    });
   }
 
   public async create(
@@ -54,5 +66,10 @@ export default class CommentController extends BaseController {
     const comment = await this.commentService.create({ ...body, userId: tokenPayload.id });
     await this.offerService.incCommentCount(body.offerId);
     this.created(res, fillDTO(CommentRdo, comment));
+  }
+
+  public async findByOfferId({ params: { offerId }, query: { limit } }: Request<ParamOfferId, unknown, unknown, RequestQuery>, res: Response) {
+    const reviews = await this.commentService.findByOfferId(offerId, Number(limit) || undefined);
+    this.ok(res, fillDTO(CommentRdo, reviews));
   }
 }

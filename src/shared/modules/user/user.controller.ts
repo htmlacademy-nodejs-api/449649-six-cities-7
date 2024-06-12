@@ -15,6 +15,7 @@ import { LoginUserDto } from './dto/login-user.dto.js';
 import { CreateUserDto } from './index.js';
 import { AuthService } from '../auth/index.js';
 import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
+import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -53,6 +54,13 @@ export class UserController extends BaseController {
       method: HttpMethod.GET,
       handler: this.checkAuth,
     });
+    this.addRoute({
+      path: '/:userId',
+      method: HttpMethod.GET,
+      handler: this.indexId,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId')
+      ]});
   }
 
   public async create(
@@ -78,18 +86,19 @@ export class UserController extends BaseController {
     res: Response,
   ): Promise<void> {
     const user = await this.authService.verify(body);
+    this.logger.info(`User ${user.email} logged in`);
     const token = await this.authService.authenticate(user);
-    const responseData = fillDTO(LoggedUserRdo, {
-      email: user.email,
-      token,
-    });
-    this.ok(res, responseData);
+    this.logger.info(`User ${user.email} got token ${token}`);
+    const responseData = fillDTO(LoggedUserRdo, user);
+    this.logger.info(`User ${user.email} got response data ${JSON.stringify(responseData)}`);
+    this.ok(res, Object.assign(responseData, { token }));
   }
 
-  public async uploadAvatar(req: Request, res: Response) {
-    this.created(res, {
-      filepath: req.file?.path
-    });
+  public async uploadAvatar({ params, file }: Request, res: Response) {
+    const { userId } = params;
+    const uploadFile = { avatarPath: file?.filename };
+    await this.userService.updateById(userId, uploadFile);
+    this.created(res, fillDTO(UploadUserAvatarRdo, { filepath: uploadFile.avatarPath }));
   }
 
   public async checkAuth({ tokenPayload: { email } }: Request, res: Response) {
@@ -104,5 +113,10 @@ export class UserController extends BaseController {
     }
 
     this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
+  }
+
+  public async indexId({params}: Request, res: Response): Promise<void> {
+    const existsOffer = await this.userService.findById(params.hostId);
+    this.ok(res, fillDTO(UserRdo, existsOffer));
   }
 }

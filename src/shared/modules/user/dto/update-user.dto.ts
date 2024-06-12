@@ -5,5 +5,5 @@ export class UpdateUserDto {
   public password?: string;
   public email?: string;
   public type?: EUserType;
-  public avatarUrl?: string;
+  public avatarPath?: string;
 }

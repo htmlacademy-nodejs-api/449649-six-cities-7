@@ -10,6 +10,7 @@ export interface IOffer {
   previewImage: string;
   images: string[];
   isPremium: boolean;
+  isFavorite: boolean;
   rating: number;
   type: EOfferType;
   bedrooms: number;

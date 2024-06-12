@@ -19,12 +19,9 @@ export class CreateOfferDto {
   @IsEnum(ECityName, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.CITY.INVALID_FORMAT })
   public city: ECityName;
 
-  public previewImage: string;
-
-  @IsArray({ message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.IMAGES.INVALID_FORMAT })
-  public images: string[];
-
   public isPremium: boolean;
+
+  public isFavorite: boolean;
 
   @IsInt({ message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.RATING.INVALID_FORMAT })
   public rating: number;

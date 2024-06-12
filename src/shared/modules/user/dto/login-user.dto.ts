@@ -1,11 +1,12 @@
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsString, Length } from 'class-validator';
 
-import { CreateLoginUserMessage } from './login-user.messages.js';
+import { CREATE_LOGIN_USER_MESSAGE } from './login-user.messages.js';
 
 export class LoginUserDto {
-  @IsEmail({}, { message: CreateLoginUserMessage.email.invalidFormat })
+  @IsEmail({}, { message: CREATE_LOGIN_USER_MESSAGE.EMAIL.INVALID_FORMAT })
   public email: string;
 
-  @IsString({ message: CreateLoginUserMessage.password.invalidFormat })
+  @IsString({ message: CREATE_LOGIN_USER_MESSAGE.PASSWORD.INVALID_FORMAT })
+  @Length(6, 12, { message: CREATE_LOGIN_USER_MESSAGE.PASSWORD.LENGTH_FIELD })
   public password: string;
 }

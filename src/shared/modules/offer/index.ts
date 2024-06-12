@@ -7,3 +7,4 @@ export { OfferService } from './offer.service.interface.js';
 export { OfferController } from './offer.controller.js';
 export { validateCity, validateGoodType, validateOfferType } from './offer-helper.js';
 export { createOfferContainer } from './offer.container.js';
+export { UploadImageRdo } from './rdo/upload-image.rdo.js';

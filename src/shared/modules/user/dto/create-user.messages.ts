@@ -1,24 +1,24 @@
-export const CreateUserMessages = {
-  name: {
-    required: 'Name is required.',
-    minLength: 'Name should be at least 1 characters long.',
-    maxLength: 'Name should be at most 15 characters long.'
+export const CREATE_USER_MESSAGES = {
+  NAME: {
+    REQUIRED: 'Name is required.',
+    MIN_LENGTH: 'Name should be at least 1 characters long.',
+    MAX_LENGTH: 'Name should be at most 15 characters long.'
   },
-  email: {
-    required: 'Email is required.',
-    invalidFormat: 'Invalid email format.'
+  EMAIL: {
+    REQUIRED: 'Email is required.',
+    INVALID_FORMAT: 'Invalid email format.'
   },
-  avatarPath: {
-    required: 'Avatar path is required.',
-    invalidFormat: 'Avatar must be a .jpg or .png image.'
+  AVATAR_PATH: {
+    REQUIRED: 'Avatar path is required.',
+    INVALID_FORMAT: 'Avatar must be a .jpg or .png image.'
   },
-  type: {
-    required: 'Type is required.',
-    invalidFormat: 'Type should be either "Pro" or "Обычный"'
+  TYPE: {
+    REQUIRED: 'Type is required.',
+    INVALID_FORMAT: 'Type should be either "Pro" or "Обычный"'
   },
-  password: {
-    required: 'Password is required.',
-    minLength: 'Password should be at least 6 characters long.',
-    maxLength: 'Password should be at most 12 characters long.'
+  PASSWORD: {
+    REQUIRED: 'Password is required.',
+    MIN_LENGTH: 'Password should be at least 6 characters long.',
+    MAX_LENGTH: 'Password should be at most 12 characters long.'
   }
 } as const;
