@@ -75,7 +75,7 @@ export class OfferController extends BaseController {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'previewImage'),
+        new UploadFileMiddleware(this.configService.get('STATIC_UPLOAD_PATH'), 'previewImage'),
       ]
     });
     this.addRoute({
