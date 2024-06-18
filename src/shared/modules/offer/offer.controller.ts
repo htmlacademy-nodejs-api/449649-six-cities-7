@@ -46,8 +46,8 @@ export class OfferController extends BaseController {
       handler: this.show,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new ValidateObjectIdMiddleware('offerId')
       ]
     });
     this.addRoute({
@@ -70,8 +70,8 @@ export class OfferController extends BaseController {
       handler: this.delete,
       middlewares: [
         new PrivateRouteMiddleware(),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
         new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
     this.addRoute({
@@ -91,8 +91,8 @@ export class OfferController extends BaseController {
       handler: this.uploadImage,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateObjectIdMiddleware('offerId'),
         new UploadFileMiddleware(this.configService.get('STATIC_UPLOAD_PATH'), 'previewImage'),
+        new ValidateObjectIdMiddleware('offerId'),
       ]
     });
     this.addRoute({
@@ -109,8 +109,8 @@ export class OfferController extends BaseController {
       handler: this.updateFavorite,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new ValidateObjectIdMiddleware('offerId')
       ],
     });
   }
@@ -169,6 +169,7 @@ export class OfferController extends BaseController {
   }
 
   public async showFavoritesOffers({ tokenPayload: { id } }: Request, res: Response): Promise<void> {
+    console.log(id);
     const offers = await this.offerService.getFavorites(id);
     this.ok(res, fillDTO(OfferRdo, offers));
   }

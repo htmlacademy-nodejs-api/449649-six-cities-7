@@ -27,8 +27,8 @@ export class UserController extends BaseController {
       method: HttpMethod.POST,
       handler: this.uploadAvatar,
       middlewares: [
-        new ValidateObjectIdMiddleware('userId'),
         new UploadFileMiddleware(this.configService.get('STATIC_UPLOAD_PATH'), 'avatar'),
+        new ValidateObjectIdMiddleware('userId')
       ]
     });
   }
@@ -37,19 +37,18 @@ export class UserController extends BaseController {
     { body }: CreateUserRequest,
     res: Response
   ): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
-
-    if (existsUser) {
-      throw new HttpError(
-        StatusCodes.CONFLICT,
-        `User with email «${body.email}» exists.`,
-        'UserController'
-      );
+    try {
+      const result = await this.userService.create(body, this.configService.get('SALT'));
+      this.created(res, fillDTO(UserRdo, result));
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.httpStatusCode).json({ message: error.message });
+      } else {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+      }
     }
-
-    const result = await this.userService.create(body, this.configService.get('SALT'));
-    this.created(res, fillDTO(UserRdo, result));
   }
+
 
   public async uploadAvatar({ params, file }: Request, res: Response) {
     const { userId } = params;
