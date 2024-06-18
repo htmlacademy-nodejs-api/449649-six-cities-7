@@ -9,7 +9,8 @@ import {
   ValidateObjectIdMiddleware,
   PrivateRouteMiddleware,
   UploadFileMiddleware,
-  RequestBody
+  RequestBody,
+  HttpError
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { EComponent } from '../../types/index.js';
@@ -22,12 +23,15 @@ import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { CommentService } from '../comment/index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { UploadImageRdo } from './rdo/upload-image.rdo.js';
+import { UserService } from '../user/user-service.interface.js';
+import { StatusCodes } from 'http-status-codes';
 
 @injectable()
 export class OfferController extends BaseController {
   constructor(
     @inject(EComponent.Logger) protected logger: Logger,
     @inject(EComponent.OfferService) private readonly offerService: OfferService,
+    @inject(EComponent.UserService) private readonly userService: UserService,
     @inject(EComponent.CommentService) private readonly commentService: CommentService,
     @inject(EComponent.Config) private readonly configService: Config<RestSchema>,
   ) {
@@ -46,8 +50,20 @@ export class OfferController extends BaseController {
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
-    this.addRoute({ path: '/premium/:city', method: HttpMethod.GET, handler: this.showPremiumOffersByCity });
-    this.addRoute({ path: '/', method: HttpMethod.POST, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateOfferDto)] });
+    this.addRoute({
+      path: '/premium',
+      method: HttpMethod.GET,
+      handler: this.showPremiumOffersByCity
+    });
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.POST,
+      handler: this.create,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateOfferDto)
+      ]
+    });
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.DELETE,
@@ -65,7 +81,8 @@ export class OfferController extends BaseController {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
-        new ValidateDtoMiddleware(UpdateOfferDto)
+        new ValidateDtoMiddleware(UpdateOfferDto),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
     this.addRoute({
@@ -87,7 +104,7 @@ export class OfferController extends BaseController {
       ]
     });
     this.addRoute({
-      path: '/:offerId/favorites',
+      path: '/favorites/:offerId',
       method: HttpMethod.PUT,
       handler: this.updateFavorite,
       middlewares: [
@@ -116,14 +133,33 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(OfferRdo, result));
   }
 
-  public async delete({ params: { offerId } }: Request<ParamOfferId>, res: Response): Promise<void> {
-    const offer = await this.offerService.deletebyId(offerId);
-    await this.commentService.deleteByOfferId(offerId);
-    this.noContent(res, offer);
+  public async delete({ params, tokenPayload }: Request, res: Response): Promise<void> {
+    const offer = await this.offerService.findOfferById(params.offerId);
+    const author = await this.userService.findById(String(offer?.userId));
+    if (author?.email !== tokenPayload.email) {
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        `${tokenPayload.email} didn't create this offer`,
+      );
+    }
+    const existsOffer = await this.offerService.deleteById(params.offerId);
+    const numberOfDeletedReviews = await this.commentService.deleteByOfferId(params.offerId);
+    this.ok(res, {
+      remoteOffer: existsOffer,
+      numberOfDeletedReviews: numberOfDeletedReviews,
+    });
   }
 
-  public async update({ body, params }: Request<ParamOfferId, unknown, UpdateOfferDto>, res: Response): Promise<void> {
-    const updatedOffer = await this.offerService.updateById(params.offerId, body);
+  public async update({ body, params, tokenPayload }: Request, res: Response): Promise<void> {
+    const offer = await this.offerService.findOfferById(params.offerId);
+    const author = await this.userService.findById(String(offer?.userId));
+    if (author?.email !== tokenPayload.email) {
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        `${tokenPayload.email} didn't create this offer`,
+      );
+    }
+    const updatedOffer = await this.offerService.updateById(String(params.offerId), body);
     this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
 
@@ -144,17 +180,12 @@ export class OfferController extends BaseController {
   }
 
   public async updateFavorite(
-    { params: { offerId }, body }: Request<ParamOfferId, RequestBody, { isFavorite: string }>,
+    { params: { offerId }, tokenPayload, body: { isFavorite } }: Request<ParamOfferId, RequestBody, { isFavorite: boolean }>,
     res: Response,
   ): Promise<void> {
-    const isFavorite = body.isFavorite === 'true';
-
-    const result = isFavorite
-      ? await this.offerService.addToFavorite(offerId)
-      : await this.offerService.deleteFromFavorite(offerId);
-
+    const offer = await this.offerService.toggleFavorite(tokenPayload.id, offerId, isFavorite);
     this.ok(res, {
-      isFavorite: result,
+      favorites: offer,
     });
   }
 }

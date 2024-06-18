@@ -31,13 +31,6 @@ export class UserController extends BaseController {
         new UploadFileMiddleware(this.configService.get('STATIC_UPLOAD_PATH'), 'avatar'),
       ]
     });
-    this.addRoute({
-      path: '/:userId',
-      method: HttpMethod.GET,
-      handler: this.indexId,
-      middlewares: [
-        new ValidateObjectIdMiddleware('userId')
-      ]});
   }
 
   public async create(
@@ -63,10 +56,5 @@ export class UserController extends BaseController {
     const uploadFile = { avatarPath: file?.filename };
     await this.userService.updateById(userId, uploadFile);
     this.created(res, fillDTO(UploadUserAvatarRdo, { filepath: uploadFile.avatarPath }));
-  }
-
-  public async indexId({params}: Request, res: Response): Promise<void> {
-    const existsOffer = await this.userService.findById(params.userId);
-    this.ok(res, fillDTO(UserRdo, existsOffer));
   }
 }

@@ -44,7 +44,6 @@ export default class CommentController extends BaseController {
       method: HttpMethod.GET,
       handler: this.findByOfferId,
       middlewares: [
-        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
       ]
     });
@@ -64,7 +63,6 @@ export default class CommentController extends BaseController {
     }
 
     const comment = await this.commentService.create({ ...body, userId: tokenPayload.id });
-    await this.offerService.incCommentCount(body.offerId);
     this.created(res, fillDTO(CommentRdo, comment));
   }
 
