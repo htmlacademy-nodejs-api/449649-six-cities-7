@@ -41,16 +41,6 @@ export class OfferController extends BaseController {
 
     this.addRoute({ path: '/', method: HttpMethod.GET, handler: this.index });
     this.addRoute({
-      path: '/:offerId',
-      method: HttpMethod.GET,
-      handler: this.show,
-      middlewares: [
-        new PrivateRouteMiddleware(),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-        new ValidateObjectIdMiddleware('offerId')
-      ]
-    });
-    this.addRoute({
       path: '/premium',
       method: HttpMethod.GET,
       handler: this.showPremiumOffersByCity
@@ -65,6 +55,14 @@ export class OfferController extends BaseController {
       ]
     });
     this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.GET,
+      handler: this.showFavoritesOffers,
+      middlewares: [
+        new PrivateRouteMiddleware()
+      ]
+    });
+    this.addRoute({
       path: '/:offerId',
       method: HttpMethod.DELETE,
       handler: this.delete,
@@ -76,13 +74,23 @@ export class OfferController extends BaseController {
     });
     this.addRoute({
       path: '/:offerId',
+      method: HttpMethod.GET,
+      handler: this.show,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new ValidateObjectIdMiddleware('offerId')
+      ]
+    });
+    this.addRoute({
+      path: '/:offerId',
       method: HttpMethod.PATCH,
       handler: this.update,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new ValidateObjectIdMiddleware('offerId'),
       ]
     });
     this.addRoute({
@@ -93,14 +101,6 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new UploadFileMiddleware(this.configService.get('STATIC_UPLOAD_PATH'), 'previewImage'),
         new ValidateObjectIdMiddleware('offerId'),
-      ]
-    });
-    this.addRoute({
-      path: '/favorites',
-      method: HttpMethod.GET,
-      handler: this.showFavoritesOffers,
-      middlewares: [
-        new PrivateRouteMiddleware()
       ]
     });
     this.addRoute({

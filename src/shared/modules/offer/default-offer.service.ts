@@ -128,14 +128,15 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async getFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {
+    const userObjectId = new Types.ObjectId(userId);
+
     return this.offerModel.aggregate([
-      { $match: { $expr: { $in: [new Types.ObjectId(userId), '$favorites'] } } },
+      { $match: { $expr: { $and: [ { $isArray: '$favorites' }, { $in: [userObjectId, '$favorites'] } ] } } },
       { $addFields: { id: { $toString: '$_id' } } },
-      { $set: { isFavorite: { $in: [new Types.ObjectId(userId), '$favorites'] } } },
+      { $set: { isFavorite: { $in: [userObjectId, '$favorites'] } } },
       { $sort: { createdAt: SortType.Down } },
-    ])
-      .exec();
-  }
+    ]).exec();
+}
 
   public async toggleFavorite(userId: string, offerId: string, isFavorite: boolean): Promise<boolean> {
     const offer = await this.offerModel.findById(offerId).exec();
