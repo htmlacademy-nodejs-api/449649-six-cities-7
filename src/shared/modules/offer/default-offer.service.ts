@@ -79,7 +79,17 @@ export class DefaultOfferService implements OfferService {
           as: 'comments',
         }
       },
-      { $set: { isFavorite: { $in: [new Types.ObjectId(currentHostId), '$favorites'] } } },
+      {
+        $set: {
+          isFavorite: {
+            $cond: {
+              if: { $isArray: '$favorites' },
+              then: { $in: [new Types.ObjectId(currentHostId), '$favorites'] },
+              else: false
+            }
+          }
+        }
+      },
       ...addReviewsToOffer,
       ...authorPipeline,
       {
@@ -88,11 +98,10 @@ export class DefaultOfferService implements OfferService {
     ])
       .exec();
 
-
     return result[0] ?? null;
   }
 
-  public async find(currentHostId?: string, count?: number,): Promise<DocumentType<OfferEntity>[]> {
+  public async find(currentHostId?: string, count?: number): Promise<DocumentType<OfferEntity>[]> {
     const limit = count || DEFAULT_OFFER_COUNT;
     return this.offerModel.aggregate([
       {
@@ -103,7 +112,17 @@ export class DefaultOfferService implements OfferService {
           as: 'comments',
         }
       },
-      { $set: { isFavorite: { $in: [new Types.ObjectId(currentHostId), '$favorites'] } } },
+      {
+        $set: {
+          isFavorite: {
+            $cond: {
+              if: { $isArray: '$favorites' },
+              then: { $in: [new Types.ObjectId(currentHostId), '$favorites'] },
+              else: false
+            }
+          }
+        }
+      },
       ...addReviewsToOffer,
       ...authorPipeline,
       { $unset: ['comments'] },
@@ -117,7 +136,7 @@ export class DefaultOfferService implements OfferService {
     return this.offerModel.aggregate([
       {
         $match: {
-          'city.name': cityName,
+          city: cityName,
           isPremium: true
         }
       },
@@ -131,12 +150,12 @@ export class DefaultOfferService implements OfferService {
     const userObjectId = new Types.ObjectId(userId);
 
     return this.offerModel.aggregate([
-      { $match: { $expr: { $and: [ { $isArray: '$favorites' }, { $in: [userObjectId, '$favorites'] } ] } } },
+      { $match: { $expr: { $and: [{ $isArray: '$favorites' }, { $in: [userObjectId, '$favorites'] }] } } },
       { $addFields: { id: { $toString: '$_id' } } },
       { $set: { isFavorite: { $in: [userObjectId, '$favorites'] } } },
       { $sort: { createdAt: SortType.Down } },
     ]).exec();
-}
+  }
 
   public async toggleFavorite(userId: string, offerId: string, isFavorite: boolean): Promise<boolean> {
     const offer = await this.offerModel.findById(offerId).exec();
