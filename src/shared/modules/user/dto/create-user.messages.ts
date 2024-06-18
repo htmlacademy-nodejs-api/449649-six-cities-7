@@ -1,8 +1,10 @@
+import { MAX_LENGTH_NAME, MAX_LENGTH_PASSWORD, MIN_LENGTH_NAME, MIN_LENGTH_PASSWORD } from '../user.constant.js';
+
 export const CREATE_USER_MESSAGES = {
   NAME: {
     REQUIRED: 'Name is required.',
-    MIN_LENGTH: 'Name should be at least 1 characters long.',
-    MAX_LENGTH: 'Name should be at most 15 characters long.'
+    MIN_LENGTH: `Name should be at least ${MIN_LENGTH_NAME} characters long.`,
+    MAX_LENGTH: `Name should be at most ${MAX_LENGTH_NAME} characters long.`
   },
   EMAIL: {
     REQUIRED: 'Email is required.',
@@ -18,7 +20,7 @@ export const CREATE_USER_MESSAGES = {
   },
   PASSWORD: {
     REQUIRED: 'Password is required.',
-    MIN_LENGTH: 'Password should be at least 6 characters long.',
-    MAX_LENGTH: 'Password should be at most 12 characters long.'
+    MIN_LENGTH: `Password should be at least ${MIN_LENGTH_PASSWORD} characters long.`,
+    MAX_LENGTH: `Password should be at most ${MAX_LENGTH_PASSWORD} characters long.`
   }
 } as const;

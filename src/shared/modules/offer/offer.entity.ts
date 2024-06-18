@@ -2,6 +2,7 @@ import { defaultClasses, getModelForClass, prop, modelOptions, Ref } from '@type
 import { UserEntity } from '../user/user.entity.js';
 import { TLocation } from '../../types/location.type.js';
 import { ECityName, EGoodType, EOfferType } from '../../types/enums.js';
+import { Types } from 'mongoose';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base { }
@@ -15,10 +16,10 @@ export interface OfferEntity extends defaultClasses.Base { }
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class OfferEntity extends defaultClasses.TimeStamps {
-  @prop({ required: true})
+  @prop({ required: true })
   public title: string;
 
-  @prop({ required: true})
+  @prop({ required: true })
   public description: string;
 
   @prop({ required: true })
@@ -69,6 +70,9 @@ export class OfferEntity extends defaultClasses.TimeStamps {
 
   @prop({ required: true })
   public location: TLocation;
+
+  @prop({ type: Types.ObjectId, required: true, default: [] })
+  public favorites: Types.Array<Types.ObjectId>;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

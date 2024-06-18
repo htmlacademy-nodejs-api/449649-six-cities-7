@@ -3,16 +3,18 @@ import { IsDateString, IsEnum, IsInt, IsMongoId, IsOptional, IsString, Max, MaxL
 import { ECityName, EGoodType, EOfferType } from '../../../types/enums.js';
 import { TLocation } from '../../../types/location.type.js';
 import { CREATE_UPDATE_OFFER_VALIDATION_MESSAGE } from './create-update-offer.messages.js';
+import { MAX_BEDROOMS, MAX_DESCRIPTION_LENGTH, MAX_PRICE, MAX_TITLE_LENGTH, MIN_BEDROOMS, MIN_DESCRIPTION_LENGTH, MIN_PRICE, MIN_TITLE_LENGTH } from '../offer.constant.js';
+
 
 export class UpdateOfferDto {
   @IsOptional()
-  @MinLength(10, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.TITLE.MIN_LENGTH })
-  @MaxLength(100, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.TITLE.MAX_LENGTH })
+  @MinLength(MIN_TITLE_LENGTH, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.TITLE.MIN_LENGTH })
+  @MaxLength(MAX_TITLE_LENGTH, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.TITLE.MAX_LENGTH })
   public title?: string;
 
   @IsOptional()
-  @MinLength(20, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.DESCRIPTION.MIN_LENGTH })
-  @MaxLength(1024, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.DESCRIPTION.MAX_LENGTH })
+  @MinLength(MIN_DESCRIPTION_LENGTH, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.DESCRIPTION.MIN_LENGTH })
+  @MaxLength(MAX_DESCRIPTION_LENGTH, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.DESCRIPTION.MAX_LENGTH })
   public description?: string;
 
   @IsOptional()
@@ -49,14 +51,14 @@ export class UpdateOfferDto {
   public bedrooms?: number;
 
   @IsOptional()
-  @Min(1, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.BEDROOMS.MIN_VALUE })
-  @Max(8, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.BEDROOMS.MAX_VALUE })
+  @Min(MIN_BEDROOMS, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.BEDROOMS.MIN_VALUE })
+  @Max(MAX_BEDROOMS, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.BEDROOMS.MAX_VALUE })
   public maxAdults?: number;
 
   @IsOptional()
   @IsInt({ message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.PRICE.INVALID_FORMAT })
-  @Min(100, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.PRICE.MIN_VALUE })
-  @Max(100000, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.PRICE.MAX_VALUE })
+  @Min(MIN_PRICE, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.PRICE.MIN_VALUE })
+  @Max(MAX_PRICE, { message: CREATE_UPDATE_OFFER_VALIDATION_MESSAGE.PRICE.MAX_VALUE })
   public price?: number;
 
   @IsOptional()

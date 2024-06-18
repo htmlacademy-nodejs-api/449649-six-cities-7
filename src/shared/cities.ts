@@ -1,5 +1,5 @@
-import { ECityName } from './enums.js';
-import { TLocation } from './location.type.js';
+import { ECityName } from './types/enums.js';
+import { TLocation } from './types/location.type.js';
 
 export const CITIES: Record<string, TLocation> = {
   [ECityName.PARIS]: { latitude: 48.85661, longitude: 2.351499 },

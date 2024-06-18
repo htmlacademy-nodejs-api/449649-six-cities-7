@@ -10,6 +10,8 @@ import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { SortType } from '../../types/sort-type.enum.js';
 import { DEFAULT_OFFER_COUNT, DEFAULT_OFFER_PREMIUM_COUNT } from './offer.constant.js';
+import { HttpError } from '../../libs/rest/index.js';
+import { StatusCodes } from 'http-status-codes';
 
 const addReviewsToOffer = [
   {
@@ -31,6 +33,25 @@ const addReviewsToOffer = [
   }
 ];
 
+const authorPipeline = [
+  {
+    $lookup: {
+      from: 'users',
+      localField: 'hostId',
+      foreignField: '_id',
+      as: 'users',
+    },
+  },
+  {
+    $addFields: {
+      author: { $arrayElemAt: ['$users', 0] },
+    },
+  },
+  {
+    $unset: ['users'],
+  },
+];
+
 @injectable()
 export class DefaultOfferService implements OfferService {
   constructor(
@@ -45,7 +66,7 @@ export class DefaultOfferService implements OfferService {
     return result;
   }
 
-  public async findOfferById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async findOfferById(offerId: string, currentHostId?: string): Promise<DocumentType<OfferEntity> | null> {
     const result = await this.offerModel.aggregate([
       {
         $match: { _id: new Types.ObjectId(offerId) }
@@ -59,22 +80,29 @@ export class DefaultOfferService implements OfferService {
         }
       },
       {
-        $addFields: {
-          reviewCount: { $size: '$comments' },
-          rating: { $avg: '$comments.rating' },
+        $set: {
+          isFavorite: {
+            $cond: {
+              if: { $isArray: '$favorites' },
+              then: { $in: [new Types.ObjectId(currentHostId), '$favorites'] },
+              else: false
+            }
+          }
         }
       },
+      ...addReviewsToOffer,
+      ...authorPipeline,
       {
         $unset: 'comments'
       }
     ])
       .exec();
 
-
     return result[0] ?? null;
   }
 
-  public async find(): Promise<DocumentType<OfferEntity>[]> {
+  public async find(currentHostId?: string, count?: number): Promise<DocumentType<OfferEntity>[]> {
+    const limit = count || DEFAULT_OFFER_COUNT;
     return this.offerModel.aggregate([
       {
         $lookup: {
@@ -85,14 +113,21 @@ export class DefaultOfferService implements OfferService {
         }
       },
       {
-        $addFields: {
-          reviewCount: { $size: '$comments' },
-          rating: { $avg: '$comments.rating' },
+        $set: {
+          isFavorite: {
+            $cond: {
+              if: { $isArray: '$favorites' },
+              then: { $in: [new Types.ObjectId(currentHostId), '$favorites'] },
+              else: false
+            }
+          }
         }
       },
+      ...addReviewsToOffer,
+      ...authorPipeline,
       { $unset: ['comments'] },
       { $sort: { createdAt: SortType.Down } },
-      { $limit: DEFAULT_OFFER_COUNT }
+      { $limit: limit }
     ])
       .exec();
   }
@@ -101,7 +136,7 @@ export class DefaultOfferService implements OfferService {
     return this.offerModel.aggregate([
       {
         $match: {
-          'city.name': cityName,
+          city: cityName,
           isPremium: true
         }
       },
@@ -112,20 +147,37 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async getFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {
+    const userObjectId = new Types.ObjectId(userId);
+
     return this.offerModel.aggregate([
-      { $match: { $expr: { $in: [new Types.ObjectId(userId), '$favorites'] } } },
-      { $set: { isFavorite: { $in: [new Types.ObjectId(userId), '$favorites'] } } },
+      { $match: { $expr: { $and: [{ $isArray: '$favorites' }, { $in: [userObjectId, '$favorites'] }] } } },
+      { $addFields: { id: { $toString: '$_id' } } },
+      { $set: { isFavorite: { $in: [userObjectId, '$favorites'] } } },
       { $sort: { createdAt: SortType.Down } },
-    ])
-      .exec();
+    ]).exec();
   }
 
-  public async addToFavorite(id: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel.findByIdAndUpdate(id, {isFavorite: true}, {new: true}).exec();
-  }
+  public async toggleFavorite(userId: string, offerId: string, isFavorite: boolean): Promise<boolean> {
+    const offer = await this.offerModel.findById(offerId).exec();
 
-  public async deleteFromFavorite(id: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel.findByIdAndUpdate(id, {isFavorite: false}, {new: true}).exec();
+    if (!offer) {
+      throw new HttpError(StatusCodes.NOT_FOUND, `Offer with id ${offerId} not found.`, 'DefaultOfferService');
+    }
+
+    const userObjectId = new Types.ObjectId(userId);
+
+    if (!isFavorite) {
+      offer?.favorites.pull(userObjectId);
+
+      await offer?.save();
+      return false;
+
+    } else {
+      offer?.favorites.push(userObjectId);
+
+      await offer?.save();
+      return true;
+    }
   }
 
   public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
@@ -135,7 +187,7 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async deletebyId(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  public async deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findByIdAndDelete(offerId)
       .exec();

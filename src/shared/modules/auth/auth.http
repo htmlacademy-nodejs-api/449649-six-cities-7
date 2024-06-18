@@ -1,0 +1,25 @@
+###
+
+## Авторизовать пользователя
+
+POST http://localhost:4000/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "criro@portugal.por",
+  "password": "seeeee"
+}
+
+###
+
+## Проверить токен пользователя
+GET http://localhost:4000/auth/check-auth HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4Njk1MTE5LCJleHAiOjE3MTg4Njc5MTl9.A2dALujeD5zimxMtQsHpx2qrrvtSGNLuEKhn7HuAsIY
+###
+
+## Разлогинить пользователя
+
+POST http://localhost:4000/auth/logout HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4Njk0ODcyLCJleHAiOjE3MTg4Njc2NzJ9.OJcn1Y5DyKa4RkyCakrzrKo7Nq4lMk_lw_PteastxQY
+
+###
