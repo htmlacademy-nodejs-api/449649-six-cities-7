@@ -6,7 +6,7 @@ Content-Type: application/json
 ###
 
 # Получить объявление по идентификатору
-GET http://localhost:4000/offers/666956c5135d3bb2b9c91f79 HTTP/1.1
+GET http://localhost:4000/offers/66717df9323269b4b927e965 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4Njk1MTE5LCJleHAiOjE3MTg4Njc5MTl9.A2dALujeD5zimxMtQsHpx2qrrvtSGNLuEKhn7HuAsIY
 
@@ -18,7 +18,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4Njk1MTE5LCJleHAiOjE3MTg4Njc5MTl9.A2dALujeD5zimxMtQsHpx2qrrvtSGNLuEKhn7HuAsIY
 
 {
-    "title": "Appartment in modern style 2",
+    "title": "Appartment in modern style 3",
     "description": "Elegant apartment with two bedrooms, a fireplace in the living room, and a view of the park. The area has well-developed infrastructure and convenient transportation access.",
     "postDate": "2024-05-15T17:27:07.513Z",
     "city": "Amsterdam",
@@ -74,7 +74,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvc
 ###
 
 ## Изменить состояние флага isFavorite
-PUT http://localhost:4000/offers/favorites/664cd997a13e0b2257af655e/ HTTP/1.1
+PUT http://localhost:4000/offers/favorites/66717df9323269b4b927e965/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImNyaXJvQHBvcnR1Z2FsLnBvciIsImlkIjoiNjY2NzA4YTZiZjRmODdiNzY4NWJkZTcwIiwiaWF0IjoxNzE4Njk1MTE5LCJleHAiOjE3MTg4Njc5MTl9.A2dALujeD5zimxMtQsHpx2qrrvtSGNLuEKhn7HuAsIY
 

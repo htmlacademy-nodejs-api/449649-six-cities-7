@@ -14,6 +14,7 @@ export type RestSchema = {
   JWT_ALGORITHM: string;
   JWT_EXPIRED: string;
   JWT_SECRET: string;
+  LOG_FILE_PATH: string;
   HOST: string;
   STATIC_DIRECTORY_PATH: string;
   STATIC_UPLOAD_PATH: string;
@@ -78,6 +79,12 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'Secret for sign JWT',
     format: String,
     env: 'JWT_SECRET',
+    default: null
+  },
+  LOG_FILE_PATH: {
+    doc: 'Path to log file',
+    format: String,
+    env: 'LOG_FILE_PATH',
     default: null
   },
   HOST: {
