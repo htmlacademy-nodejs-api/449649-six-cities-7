@@ -8,6 +8,8 @@ import { EComponent } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { DEFAULT_AVATAR_FILE_NAME } from './user.constant.js';
+import { HttpError } from '../../libs/rest/index.js';
+import { StatusCodes } from 'http-status-codes';
 
 @injectable()
 export class DefaultUserService implements UserService {
@@ -17,6 +19,16 @@ export class DefaultUserService implements UserService {
   ) { }
 
   public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<Omit<UserEntity, 'password'>>> {
+    const existsUser = await this.userModel.findOne({ email: dto.email });
+
+    if (existsUser) {
+      throw new HttpError(
+        StatusCodes.CONFLICT,
+        `User with email «${dto.email}» exists.`,
+        'UserService'
+      );
+    }
+
     const user = new UserEntity({ ...dto, avatarPath: DEFAULT_AVATAR_FILE_NAME });
     user.setPassword(dto.password, salt);
 

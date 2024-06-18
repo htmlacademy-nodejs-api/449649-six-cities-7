@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import multer, { diskStorage } from 'multer';
 import { extension } from 'mime-types';
-
 import * as crypto from 'node:crypto';
-
 import { Middleware } from './middleware.interface.js';
+import { ALLOWED_MIME_TYPES } from './middleware.constant.js';
 
 export class UploadFileMiddleware implements Middleware {
   constructor(
@@ -16,15 +15,18 @@ export class UploadFileMiddleware implements Middleware {
     const storage = diskStorage({
       destination: this.uploadDirectory,
       filename: (_req, file, callback) => {
-        const fileExtention = extension(file.mimetype);
+        const fileExtension = extension(file.mimetype);
+
+        if (!ALLOWED_MIME_TYPES.includes(file.mimetype) || !fileExtension) {
+          return callback(new Error('Invalid file type'), '');
+        }
+
         const filename = crypto.randomUUID();
-        callback(null, `${filename}.${fileExtention}`);
+        callback(null, `${filename}.${fileExtension}`);
       }
     });
 
-    const uploadSingleFileMiddleware = multer({ storage })
-      .single(this.fieldName);
-
+    const uploadSingleFileMiddleware = multer({ storage }).single(this.fieldName);
     uploadSingleFileMiddleware(req, res, next);
   }
 }

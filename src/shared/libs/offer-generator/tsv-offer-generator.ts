@@ -4,7 +4,7 @@ import { OfferGenerator } from './offer-generator.interface.js';
 import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
 import { TMockServerData } from '../../types/mock-server-data.types.js';
 import { ECityName, EGoodType, EOfferType } from '../../types/enums.js';
-import { CITIES } from '../../types/cities.type.js';
+import { CITIES } from '../../cities.js';
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: TMockServerData) { }

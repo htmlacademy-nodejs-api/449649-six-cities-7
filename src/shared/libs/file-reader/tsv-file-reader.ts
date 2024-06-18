@@ -2,12 +2,12 @@ import EventEmitter from 'node:events';
 import { createReadStream } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
 import { ECityName, EGoodType, EOfferType, EUserType } from '../../types/enums.js';
-import { IOffer } from '../../types/offer.type.js';
-import { IUser } from '../../types/user.type.js';
+import { IOffer } from '../../types/offer.interface.js';
+import { IUser } from '../../types/user.interface.js';
 import { TLocation } from '../../types/location.type.js';
 
 export class TSVFileReader extends EventEmitter implements FileReader {
-  private CHUNK_SIZE = 16384; // 16KB
+  private CHUNK_SIZE = 16384;
 
   constructor(private readonly filename: string) {
     super();
