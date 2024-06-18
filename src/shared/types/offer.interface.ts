@@ -1,6 +1,6 @@
 import { ECityName, EGoodType, EOfferType } from './enums.js';
 import { TLocation } from './location.type.js';
-import { IUser } from './user.type.js';
+import { IUser } from './user.interface.js';
 
 export interface IOffer {
   title: string;

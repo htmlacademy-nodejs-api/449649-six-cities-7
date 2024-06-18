@@ -11,6 +11,8 @@ export type RestSchema = {
   DB_PASSWORD: string;
   DB_PORT: string;
   DB_NAME: string;
+  JWT_ALGORITHM: string;
+  JWT_EXPIRED: string;
   JWT_SECRET: string;
   HOST: string;
   STATIC_DIRECTORY_PATH: string;
@@ -58,6 +60,18 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'Database name (MongoDB)',
     format: String,
     env: 'DB_NAME',
+    default: null
+  },
+  JWT_ALGORITHM: {
+    doc: 'Algorithm for JWT',
+    format: String,
+    env: 'JWT_ALGORITHM',
+    default: null
+  },
+  JWT_EXPIRED: {
+    doc: 'Expired time for JWT',
+    format: String,
+    env: 'JWT_EXPIRED',
     default: null
   },
   JWT_SECRET: {

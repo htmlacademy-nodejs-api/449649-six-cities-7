@@ -1,4 +1,4 @@
-import { CITIES } from '../../types/cities.type.js';
+import { CITIES } from '../../cities.js';
 import { EGoodType, EOfferType } from '../../types/enums.js';
 
 export function validateCity(cityName: string): boolean {
