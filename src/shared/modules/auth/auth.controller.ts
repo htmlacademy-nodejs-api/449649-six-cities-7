@@ -9,12 +9,14 @@ import { LoginUserRequest } from '../user/login-user-request.type.js';
 import { AuthService } from './auth-service.interface.js';
 import { LoggedUserRdo } from '../user/rdo/logged-user.rdo.js';
 import { fillDTO } from '../../helpers/common.js';
+import { UserService } from '../user/user-service.interface.js';
 
 @injectable()
 export class AuthController extends BaseController {
   constructor(
     @inject(EComponent.Logger) protected readonly logger: Logger,
-    @inject(EComponent.AuthService) private readonly authService: AuthService
+    @inject(EComponent.AuthService) private readonly authService: AuthService,
+    @inject(EComponent.UserService) private readonly userService: UserService
   ) {
     super(logger);
     this.logger.info('Register routes for AuthController…');
@@ -49,7 +51,7 @@ export class AuthController extends BaseController {
   }
 
   public async checkAuth({ tokenPayload: { email } }: Request, res: Response) {
-    const foundedUser = await this.authService.verify({ email, password: '' });
+    const foundedUser = await this.userService.findByEmail(email);
 
     if (!foundedUser) {
       throw new HttpError(
