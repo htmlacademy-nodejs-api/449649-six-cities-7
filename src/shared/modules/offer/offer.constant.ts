@@ -9,7 +9,5 @@ export const MIN_RATING = 1;
 export const MAX_RATING = 5;
 export const MIN_BEDROOMS = 1;
 export const MAX_BEDROOMS = 8;
-export const MIN_MAX_ADULTS = 1;
-export const MAX_MAX_ADULTS = 10;
 export const MIN_PRICE = 100;
 export const MAX_PRICE = 100000;

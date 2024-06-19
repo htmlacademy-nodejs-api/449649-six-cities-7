@@ -166,18 +166,14 @@ export class DefaultOfferService implements OfferService {
 
     const userObjectId = new Types.ObjectId(userId);
 
-    if (!isFavorite) {
-      offer?.favorites.pull(userObjectId);
-
-      await offer?.save();
-      return false;
-
+    if (isFavorite) {
+      offer.favorites.push(userObjectId);
     } else {
-      offer?.favorites.push(userObjectId);
-
-      await offer?.save();
-      return true;
+      offer.favorites.pull(userObjectId);
     }
+
+    await offer.save();
+    return isFavorite;
   }
 
   public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {

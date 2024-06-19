@@ -41,19 +41,19 @@ export class RestApplication {
     return this.databaseClient.connect(mongoUri);
   }
 
-  private async initServer() {
+  private initServer() {
     const port = this.config.get('PORT');
     this.server.listen(port);
   }
 
-  private async initControllers() {
+  private initControllers() {
     this.server.use('/offers', this.offerController.router);
     this.server.use('/users', this.userController.router);
     this.server.use('/comments', this.commentController.router);
     this.server.use('/auth', this.authController.router);
   }
 
-  private async initMiddleware() {
+  private initMiddleware() {
     const authenticateMiddleware = new ParseTokenMiddleware(this.config.get('JWT_SECRET'));
 
     this.server.use(express.json());
@@ -69,7 +69,7 @@ export class RestApplication {
     this.server.use(cors());
   }
 
-  private async initExceptionFilters() {
+  private initExceptionFilters() {
     this.server.use(this.authExceptionFilter.catch.bind(this.authExceptionFilter));
     this.server.use(this.validationExceptionFilter.catch.bind(this.validationExceptionFilter));
     this.server.use(this.httpExceptionFilter.catch.bind(this.httpExceptionFilter));
