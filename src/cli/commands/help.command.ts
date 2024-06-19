@@ -6,7 +6,7 @@ export class HelpCommand implements Command {
     return '--help';
   }
 
-  public async execute(..._parameters: string[]): Promise<void> {
+  public execute(..._parameters: string[]): void {
     console.log(`
         ${chalk.green('Программа для подготовки данных для REST API сервера.')}
         ${chalk.yellow('Пример:')}
